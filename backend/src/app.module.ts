@@ -8,6 +8,7 @@ import { PostsModule } from './modules/posts/posts.module';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { SupabaseModule } from './supabase/supabase.module';
 
 @Module({
   imports: [
@@ -15,8 +16,9 @@ import { AppService } from './app.service';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost/nest'),
-    AuthModule,
     UsersModule,
+    SupabaseModule,
+    AuthModule,
     PostsModule,
   ],
   controllers: [AppController],

@@ -29,11 +29,11 @@ export class RegisterUserDto {
     message:
       'La contraseña debe tener al menos una mayúscula, un número y 8 caracteres',
   })
-  contraseña: string;
+  password: string;
 
   @IsString()
   @IsNotEmpty()
-  repetirContraseña: string;
+  repetirPassword: string;
 
   @IsOptional()
   fechaNacimiento?: Date;

@@ -1,38 +1,27 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { User, UserDocument } from './schemas/user.schema/user.schema';
-import { Model } from 'mongoose';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from './schemas/user.schema';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  // Crear un nuevo usuario
-  async create(userData: Partial<User>): Promise<User> {
-    // Verificamos que no exista correo o nombreUsuario duplicado
-    const userExists = await this.userModel.findOne({
-      $or: [
-        { correo: userData.correo },
-        { nombreUsuario: userData.nombreUsuario },
-      ],
-    });
-    if (userExists) {
-      throw new ConflictException('El correo o nombre de usuario ya existe');
-    }
-
-    const newUser = new this.userModel(userData);
-    return newUser.save();
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const user = new this.userModel(createUserDto);
+    return user.save();
   }
 
-  // Buscar usuario por correo o nombreUsuario (para login)
-  async findByLoginField(loginField: string): Promise<User | null> {
+  async findByEmailOrUsername(correo: string, nombreUsuario: string) {
     return this.userModel.findOne({
-      $or: [{ correo: loginField }, { nombreUsuario: loginField }],
+      $or: [{ correo }, { nombreUsuario }],
     });
   }
 
-  // Buscar usuario por ID
-  async findById(id: string): Promise<User | null> {
-    return this.userModel.findById(id);
+  async findByEmailOrUsernameLogin(identifier: string) {
+    return this.userModel.findOne({
+      $or: [{ correo: identifier }, { nombreUsuario: identifier }],
+    });
   }
 }

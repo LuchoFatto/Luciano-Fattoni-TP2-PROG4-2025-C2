@@ -1,10 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type UserDocument = User & Document;
-
-@Schema({ timestamps: true }) // crea createdAt y updatedAt automáticamente
-export class User {
+@Schema({ timestamps: true })
+export class User extends Document {
   @Prop({ required: true })
   nombre: string;
 
@@ -18,19 +16,19 @@ export class User {
   nombreUsuario: string;
 
   @Prop({ required: true })
-  contraseña: string;
+  password: string;
+
+  @Prop({ default: 'usuario' })
+  perfil: string;
 
   @Prop()
-  fechaNacimiento: Date;
+  fechaNacimiento: string;
 
   @Prop()
   descripcion: string;
 
   @Prop()
-  imagenPerfil: string; // URL o path local
-
-  @Prop({ default: 'usuario' })
-  perfil: string;
+  imagenPerfil: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
