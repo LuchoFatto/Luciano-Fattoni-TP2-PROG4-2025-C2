@@ -33,4 +33,28 @@ export class SupabaseService {
 
     return publicUrlData.publicUrl;
   }
+
+  async uploadPostImage(
+    file: Express.Multer.File,
+    postId: string,
+  ): Promise<string> {
+    const fileName = `posts/${postId}-${Date.now()}-${file.originalname}`;
+
+    const { data, error } = await this.supabase.storage
+      .from('posts')
+      .upload(fileName, file.buffer, {
+        contentType: file.mimetype,
+        cacheControl: '3600',
+        upsert: false,
+      });
+
+    if (error)
+      throw new InternalServerErrorException('Error al subir imagen del post');
+
+    const { data: publicUrlData } = this.supabase.storage
+      .from('posts')
+      .getPublicUrl(data.path);
+
+    return publicUrlData.publicUrl;
+  }
 }
