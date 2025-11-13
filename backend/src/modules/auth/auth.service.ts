@@ -72,6 +72,6 @@ export class AuthService {
 
     const { password: _, ...usuarioSinPassword } = user.toObject();
 
-    return { message: 'Login exitoso', token, usuarioSinPassword };
+    return { message: 'Login exitoso', token, usuario: usuarioSinPassword };
   }
 }

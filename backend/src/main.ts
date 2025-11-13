@@ -6,7 +6,19 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Pipe global para validar DTOs automáticamente
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true, // elimina campos no definidos en DTO
+      forbidNonWhitelisted: false, // evita error si llega algo extra
+      transform: true, // convierte strings a tipos esperados
+    }),
+  );
+
+  app.enableCors({
+    origin: 'http://localhost:4200', // frontend
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
   // Puerto desde .env
   const port = process.env.PORT || 3000;

@@ -16,10 +16,20 @@ export class AuthController {
 
   @Post('register')
   @UseInterceptors(FileInterceptor('imagenPerfil'))
-  register(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() createUserDto: CreateUserDto,
-  ) {
+  async register(@UploadedFile() file: Express.Multer.File, @Body() body: any) {
+    // Convertimos el body al DTO manualmente
+    const createUserDto: CreateUserDto = {
+      nombre: body.nombre,
+      apellido: body.apellido,
+      correo: body.correo,
+      nombreUsuario: body.nombreUsuario,
+      password: body.password,
+      perfil: '',
+      fechaNacimiento: body.fechaNacimiento,
+      descripcion: body.descripcion,
+      imagenPerfil: '',
+    };
+
     return this.authService.register(createUserDto, file);
   }
 
