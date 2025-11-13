@@ -1,1 +1,195 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --khaki: #bcac9b;
+  --coffee: #6a5034;
+  --silver-lake-blue: #6290c8;
+  --delft-blue: #1d3461;
+  --navy-blue: #09036f;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+    Base global
+   ========================= */
+@layer base {
+  body {
+    @apply bg-[var(--khaki)] text-[var(--delft-blue)] font-sans min-h-screen antialiased;
+  }
+
+  a {
+    @apply text-[var(--silver-lake-blue)] hover:text-[var(--navy-blue)] transition-colors duration-200;
+  }
+
+  button {
+    @apply transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--silver-lake-blue)] focus-visible:ring-offset-2;
+  }
+
+  /* Mejorar scroll en móviles */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* =========================
+    Componentes reutilizables
+   ========================= */
+@layer components {
+  .container-click {
+    @apply mx-auto max-w-xl px-4 py-6;
+  }
+
+  /* Versión responsive del container */
+  @media (min-width: 640px) {
+    .container-click {
+      @apply px-6;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-click {
+      @apply max-w-2xl;
+    }
+  }
+
+  .card {
+    @apply bg-white text-[var(--delft-blue)] rounded-xl shadow border border-gray-100 overflow-hidden;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg font-medium transition-all select-none disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98];
+  }
+
+  .btn-primary {
+    @apply btn bg-[var(--silver-lake-blue)] text-white hover:bg-[var(--delft-blue)] shadow-sm hover:shadow;
+  }
+
+  .btn-secondary {
+    @apply btn bg-[var(--coffee)] text-white hover:bg-[var(--delft-blue)] shadow-sm hover:shadow;
+  }
+
+  .btn-outline {
+    @apply btn border-2 border-[var(--silver-lake-blue)] text-[var(--silver-lake-blue)] hover:bg-[var(--silver-lake-blue)] hover:text-white;
+  }
+
+  .input-base {
+    @apply w-full rounded-lg border border-gray-300 px-3 py-2 text-base
+          focus:outline-none focus:ring-2 focus:ring-[var(--silver-lake-blue)] focus:border-transparent
+          placeholder:text-gray-400 disabled:bg-gray-50 disabled:cursor-not-allowed
+          transition-shadow;
+  }
+
+  /* Input más grande en móviles para evitar zoom */
+  @media (max-width: 640px) {
+    .input-base {
+      @apply text-[16px];
+    }
+  }
+
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1.5;
+  }
+
+  .error-text {
+    @apply text-sm text-red-600 mt-1 font-medium;
+  }
+
+  /* Utilidades para ocultar scrollbar pero mantener funcionalidad */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Skeleton loader para estados de carga */
+  .skeleton {
+    @apply animate-pulse bg-gray-200 rounded;
+  }
+
+  /* Separador visual */
+  .divider {
+    @apply border-t border-gray-200 my-4;
+  }
+}
+
+/* =========================
+    SweetAlert2 customization
+   ========================= */
+.swal2-popup {
+  font-family: inherit !important;
+  border-radius: 12px !important;
+}
+
+.colored-toast.swal2-icon-success {
+  background-color: #10b981 !important;
+}
+
+.colored-toast.swal2-icon-error {
+  background-color: #ef4444 !important;
+}
+
+.colored-toast.swal2-icon-warning {
+  background-color: #f59e0b !important;
+}
+
+.colored-toast.swal2-icon-info {
+  background-color: var(--silver-lake-blue) !important;
+}
+
+.colored-toast .swal2-title {
+  color: white !important;
+}
+
+.colored-toast .swal2-close {
+  color: white !important;
+}
+
+/* =========================
+    Animations
+   ========================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* =========================
+    Responsive helpers
+   ========================= */
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Texto truncado con tooltip */
+  .truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,127 @@
+<nav class="w-full bg-delft text-khaki shadow-md sticky top-0 z-50">
+  <div class="flex items-center justify-between h-14 px-4 md:px-8">
+    <!-- LOGO IZQUIERDA -->
+    <button
+      class="font-bold text-xl md:text-2xl tracking-wide hover:text-silver transition select-none"
+      (click)="logoClicked.emit()"
+      aria-label="Ir al inicio"
+    >
+      {{ appName }}
+    </button>
+
+    <!-- LINKS (DESKTOP) -->
+    <div class="hidden md:flex items-center gap-6">
+      @for (link of links; track link.label) {
+      <button
+        class="text-sm lg:text-base hover:text-silver transition"
+        (click)="linkClicked.emit(link)"
+      >
+        {{ link.label }}
+      </button>
+      }
+    </div>
+
+    <!-- PERFIL + DROPDOWN + HAMBURGUESA -->
+    <div class="flex items-center gap-3">
+      <!-- PERFIL (DESKTOP) -->
+      <div class="relative hidden md:flex items-center gap-3">
+        <span class="font-medium text-sm max-w-[120px] truncate">
+          {{ username || 'Invitado' }}
+        </span>
+
+        <button
+          (click)="toggleDropdown()"
+          class="flex items-center gap-2 hover:opacity-80 transition p-1.5 rounded-lg hover:bg-navy/20"
+          [attr.aria-expanded]="dropdownOpen()"
+          aria-label="Menú de usuario"
+        >
+          <img
+            [src]="avatarUrl || defaultAvatar"
+            class="w-9 h-9 rounded-full border-2 border-silver object-cover"
+            [alt]="username || 'Usuario'"
+          />
+
+          <!-- FLECHA SOLO EN DESKTOP -->
+          <svg
+            class="w-4 h-4 transition-transform"
+            [class.rotate-180]="dropdownOpen()"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+
+        <!-- DROPDOWN (DESKTOP) -->
+        @if (dropdownItems.length > 0 && dropdownOpen()) {
+        <div
+          class="absolute right-0 mt-2 w-48 bg-white text-delft rounded-lg shadow-xl border border-gray-200 overflow-hidden animate-fade-in"
+        >
+          @for (item of dropdownItems; track $index) { @if (item.divider) {
+          <hr class="my-1 border-gray-200" />
+          } @else {
+          <button
+            class="w-full text-left px-4 py-2.5 text-sm hover:bg-khaki/20 transition flex items-center gap-2"
+            (click)="dropdownClick(item)"
+          >
+            {{ item.label }}
+          </button>
+          } }
+        </div>
+        }
+      </div>
+
+      <!-- BOTÓN HAMBURGUESA (MOBILE) -->
+      <button
+        class="md:hidden p-2 rounded hover:bg-navy/20 transition"
+        (click)="mobileMenuOpen.set(!mobileMenuOpen())"
+        aria-label="Abrir menú"
+      >
+        <svg class="w-7 h-7" fill="none" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- MENÚ MOBILE -->
+  @if (mobileMenuOpen()) {
+  <div
+    class="md:hidden bg-delft text-khaki border-t border-navy animate-fade-in px-4 py-4 space-y-4"
+  >
+    <!-- LINKS MOBILE -->
+    @for (link of links; track link.label) {
+    <button
+      class="block w-full text-left text-lg hover:text-silver transition"
+      (click)="linkClicked.emit(link); mobileMenuOpen.set(false)"
+    >
+      {{ link.label }}
+    </button>
+    }
+
+    <!-- OPCIONES DE USUARIO (del dropdown) EN MOBILE -->
+    @if (dropdownItems.length > 0) {
+    <hr class="border-khaki/30" />
+
+    @for (item of dropdownItems; track $index) { @if (!item.divider) {
+    <button
+      class="block w-full text-left text-lg hover:text-silver transition"
+      (click)="dropdownClick(item); mobileMenuOpen.set(false)"
+    >
+      {{ item.label }}
+    </button>
+    } } }
+  </div>
+  }
+</nav>

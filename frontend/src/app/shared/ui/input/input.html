@@ -1,0 +1,65 @@
+<div class="relative w-full">
+  <input
+    class="input-base transition-shadow w-full pr-10"
+    [class.border-red-500]="control.invalid && control.touched"
+    [class.focus:ring-red-500]="control.invalid && control.touched"
+    [type]="currentType"
+    [placeholder]="placeholder"
+    [formControl]="control"
+    [autocomplete]="autocomplete"
+    [readonly]="readonly"
+    [attr.aria-label]="ariaLabel"
+    [attr.aria-invalid]="control.invalid && control.touched"
+  />
+
+  <!-- OJITO: solo si el input es type="password" -->
+  @if (type === 'password') {
+  <button
+    type="button"
+    (click)="toggleVisibility()"
+    class="absolute inset-y-0 right-0 flex items-center px-3 cursor-pointer"
+    tabindex="-1"
+  >
+    @if (currentType === 'password') {
+    <!-- Ojo cerrado -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-5 w-5 text-gray-500 hover:text-gray-700 transition"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+      />
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+      />
+    </svg>
+    } @else {
+    <!-- Ojo tachado -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-5 w-5 text-gray-500 hover:text-gray-700 transition"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.993 9.993 0 013.593-5.236m3.92-1.585A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.966 9.966 0 01-1.255 2.671M9.88 9.88a3 3 0 104.24 4.24"
+      />
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+    </svg>
+    }
+  </button>
+  }
+</div>
