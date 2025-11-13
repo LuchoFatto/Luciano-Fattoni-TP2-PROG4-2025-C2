@@ -1,0 +1,93 @@
+<div class="flex justify-center py-10">
+  <ui-card class="max-w-4xl w-full">
+    <!-- Título -->
+    <h1 class="text-2xl font-bold mb-6 text-center">Crear cuenta</h1>
+
+    <!-- Layout principal: formulario + imagen -->
+    <div class="flex gap-10 items-start">
+      <!-- ================= FORMULARIO (IZQUIERDA) ================= -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex-1 space-y-4">
+        <!-- Nombre + Apellido -->
+        <div class="grid grid-cols-2 gap-4">
+          <ui-form-field label="Nombre" [control]="form.controls['nombre']">
+            <ng-template #control>
+              <ui-input [control]="form.controls['nombre']" placeholder="Ej: Juan" />
+            </ng-template>
+          </ui-form-field>
+
+          <ui-form-field label="Apellido" [control]="form.controls['apellido']">
+            <ng-template #control>
+              <ui-input [control]="form.controls['apellido']" placeholder="Ej: Pérez" />
+            </ng-template>
+          </ui-form-field>
+        </div>
+
+        <!-- Correo -->
+        <ui-form-field label="Correo electrónico" [control]="form.controls['correo']">
+          <ng-template #control>
+            <ui-input
+              type="email"
+              [control]="form.controls['correo']"
+              placeholder="usuario@email.com"
+            />
+          </ng-template>
+        </ui-form-field>
+
+        <!-- Nombre de usuario -->
+        <ui-form-field label="Nombre de usuario" [control]="form.controls['nombreUsuario']">
+          <ng-template #control>
+            <ui-input [control]="form.controls['nombreUsuario']" placeholder="Ej: lucho123" />
+          </ng-template>
+        </ui-form-field>
+
+        <!-- Password + Repetir contraseña -->
+        <div class="grid grid-cols-2 gap-4">
+          <ui-form-field label="Contraseña" [control]="form.controls['password']">
+            <ng-template #control>
+              <ui-input type="password" [control]="form.controls['password']" />
+            </ng-template>
+          </ui-form-field>
+
+          <ui-form-field label="Repetir contraseña" [control]="form.controls['repetirContraseña']">
+            <ng-template #control>
+              <ui-input type="password" [control]="form.controls['repetirContraseña']" />
+            </ng-template>
+          </ui-form-field>
+        </div>
+
+        <!-- Fecha -->
+        <ui-form-field label="Fecha de nacimiento" [control]="form.controls['fechaNacimiento']">
+          <ng-template #control>
+            <ui-input type="date" [control]="form.controls['fechaNacimiento']" />
+          </ng-template>
+        </ui-form-field>
+
+        <!-- Descripción (compacta) -->
+        <ui-form-field label="Descripción breve" [control]="form.controls['descripcion']">
+          <ng-template #control>
+            <ui-textarea
+              [control]="form.controls['descripcion']"
+              [maxLength]="150"
+              [showCount]="true"
+              class="h-20"
+            />
+          </ng-template>
+        </ui-form-field>
+      </form>
+
+      <!-- ================= Uploader (DERECHA) ================= -->
+      <div class="w-48 flex flex-col items-center gap-3">
+        <ui-image-uploader (fileSelected)="onFileSelected($event)" />
+      </div>
+    </div>
+
+    <!-- ================= BOTÓN ================= -->
+    <div class="mt-8 flex justify-between items-center">
+      <a routerLink="/login" class="text-sm text-silver hover:underline">
+        ¿Ya tenés cuenta? Iniciá sesión
+      </a>
+
+      <ui-button type="submit" variant="primary" [loading]="loading"> Crear cuenta </ui-button>
+    </div>
+  </ui-card>
+</div>

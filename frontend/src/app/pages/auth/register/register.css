@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  animation: fadeIn 0.3s ease-out;
+}
+
+h1 {
+  color: var(--delft-blue);
+}
+
+form {
+  @apply space-y-4;
+}
+
+/* Opcional: ajustar el uploader */
+ui-image-uploader {
+  @apply w-full;
+}

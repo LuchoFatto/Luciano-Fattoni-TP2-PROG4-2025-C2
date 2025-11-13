@@ -1,0 +1,39 @@
+<div class="container-click animate-fade-in">
+  <ui-card [hoverable]="true" [padding]="true">
+    <ng-template #cardHeader>
+      <h1 class="text-xl font-bold text-center">Iniciar sesión</h1>
+    </ng-template>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="space-y-4 mt-2">
+      <!-- Usuario o correo -->
+      <ui-form-field label="Usuario o correo" [control]="form.controls['identifier']">
+        <ng-template #control>
+          <ui-input
+            [control]="form.controls['identifier']"
+            placeholder="Ej: lucho123 o lucho@email.com"
+          />
+        </ng-template>
+      </ui-form-field>
+
+      <!-- Contraseña -->
+      <ui-form-field label="Contraseña" [control]="form.controls['password']">
+        <ng-template #control>
+          <ui-input type="password" [control]="form.controls['password']" placeholder="••••••••" />
+        </ng-template>
+      </ui-form-field>
+
+      <!-- Botón -->
+      <ui-button variant="primary" type="submit" [loading]="loading" [full]="true" class="mt-4">
+        Ingresar
+      </ui-button>
+
+      <!-- Enlace a registro -->
+      <p class="text-sm text-center text-gray-600 mt-3">
+        ¿No tenés cuenta?
+        <a routerLink="/register" class="text-silver font-medium hover:underline">
+          Crear una cuenta
+        </a>
+      </p>
+    </form>
+  </ui-card>
+</div>
