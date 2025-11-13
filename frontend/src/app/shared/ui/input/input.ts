@@ -20,7 +20,7 @@ export class InputComponent {
   currentType = 'text'; // default, será corregido en ngOnInit
 
   ngOnInit() {
-    // AHORA sí toma el valor real del @Input
+    // Toma el valor real del @Input
     this.currentType = this.type;
   }
 

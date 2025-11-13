@@ -45,7 +45,7 @@ export class ButtonComponent {
 
   @HostBinding('class')
   get hostClass(): string {
-    const base = 'btn overflow-hidden rounded-lg'; // Añadido overflow-hidden para el spinner
+    const base = 'btn overflow-hidden rounded-lg';
 
     const sizes: Record<Size, string> = {
       sm: 'px-3 py-1.5 text-sm',
@@ -61,7 +61,6 @@ export class ButtonComponent {
       ghost: 'bg-transparent hover:bg-gray-100 text-delft',
     };
 
-    // ⬅️ CAMBIO CLAVE: Aseguramos que el Host sea un bloque y ocupe todo el ancho si `full` es true
     const width = this.full ? 'w-full block' : 'inline-block';
 
     return `${base} ${sizes[this.size]} ${variants[this.variant]} ${width}`.trim();

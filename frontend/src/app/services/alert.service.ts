@@ -98,7 +98,7 @@ export class AlertService {
   }
 
   /**
-   * Alerta informativa simple
+   * Alerta informativa
    */
   async alert(
     title: string,

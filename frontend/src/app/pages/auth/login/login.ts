@@ -35,7 +35,7 @@ export class Login {
 
   loading = false;
 
-  // Form tipado y limpio
+  // Form
   form = this.fb.group({
     identifier: this.fb.control('', {
       validators: [Validators.required],
