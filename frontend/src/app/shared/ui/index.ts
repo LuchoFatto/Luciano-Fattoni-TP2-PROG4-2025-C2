@@ -8,3 +8,4 @@ export * from './input/input';
 export * from './textarea/textarea';
 export * from './navbar/navbar';
 export * from './spinner/spinner';
+export * from './password-hints/password-hints';

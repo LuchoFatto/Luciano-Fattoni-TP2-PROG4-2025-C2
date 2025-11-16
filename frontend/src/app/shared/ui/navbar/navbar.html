@@ -1,6 +1,5 @@
-<nav class="w-full bg-delft text-khaki shadow-md sticky top-0 z-50">
+<nav class="w-full bg-delft text-khaki shadow-md sticky top-0 z-50 overflow-visible">
   <div class="flex items-center justify-between h-14 px-4 md:px-8">
-    <!-- LOGO IZQUIERDA -->
     <button
       class="font-bold text-xl md:text-2xl tracking-wide hover:text-silver transition select-none"
       (click)="logoClicked.emit()"
@@ -9,7 +8,6 @@
       {{ appName }}
     </button>
 
-    <!-- LINKS (DESKTOP) -->
     <div class="hidden md:flex items-center gap-6">
       @for (link of links; track link.label) {
       <button
@@ -21,9 +19,7 @@
       }
     </div>
 
-    <!-- PERFIL + DROPDOWN + HAMBURGUESA -->
     <div class="flex items-center gap-3">
-      <!-- PERFIL (DESKTOP) -->
       <div class="relative hidden md:flex items-center gap-3">
         <span class="font-medium text-sm max-w-[120px] truncate">
           {{ username || 'Invitado' }}
@@ -41,7 +37,6 @@
             [alt]="username || 'Usuario'"
           />
 
-          <!-- FLECHA SOLO EN DESKTOP -->
           <svg
             class="w-4 h-4 transition-transform"
             [class.rotate-180]="dropdownOpen()"
@@ -58,10 +53,10 @@
           </svg>
         </button>
 
-        <!-- DROPDOWN (DESKTOP) -->
+        <!-- DROPDOWN -->
         @if (dropdownItems.length > 0 && dropdownOpen()) {
         <div
-          class="absolute right-0 mt-2 w-48 bg-white text-delft rounded-lg shadow-xl border border-gray-200 overflow-hidden animate-fade-in"
+          class="absolute right-0 top-full mt-2 w-48 bg-white text-delft rounded-lg shadow-xl border border-gray-200 overflow-hidden animate-fade-in z-[9999]"
         >
           @for (item of dropdownItems; track $index) { @if (item.divider) {
           <hr class="my-1 border-gray-200" />
@@ -77,7 +72,6 @@
         }
       </div>
 
-      <!-- BOTÓN HAMBURGUESA (MOBILE) -->
       <button
         class="md:hidden p-2 rounded hover:bg-navy/20 transition"
         (click)="mobileMenuOpen.set(!mobileMenuOpen())"
@@ -95,12 +89,10 @@
     </div>
   </div>
 
-  <!-- MENÚ MOBILE -->
   @if (mobileMenuOpen()) {
   <div
     class="md:hidden bg-delft text-khaki border-t border-navy animate-fade-in px-4 py-4 space-y-4"
   >
-    <!-- LINKS MOBILE -->
     @for (link of links; track link.label) {
     <button
       class="block w-full text-left text-lg hover:text-silver transition"
@@ -108,10 +100,7 @@
     >
       {{ link.label }}
     </button>
-    }
-
-    <!-- OPCIONES DE USUARIO (del dropdown) EN MOBILE -->
-    @if (dropdownItems.length > 0) {
+    } @if (dropdownItems.length > 0) {
     <hr class="border-khaki/30" />
 
     @for (item of dropdownItems; track $index) { @if (!item.divider) {

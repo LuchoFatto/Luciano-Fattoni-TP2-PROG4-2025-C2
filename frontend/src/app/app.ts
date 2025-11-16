@@ -1,4 +1,4 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, effect, signal, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/ui/navbar/navbar';
 import { AuthService } from './services/auth.service';
@@ -10,20 +10,20 @@ import { AuthService } from './services/auth.service';
   templateUrl: './app.html',
 })
 export class AppComponent {
-  constructor(private auth: AuthService, private router: Router) {}
+  private router = inject(Router);
+  private auth = inject(AuthService);
 
-  // Signals para el navbar
+  // Signals
   username = signal<string>('Invitado');
   avatarUrl = signal<string | null>(null);
   navLinks = signal<{ label: string }[]>([]);
   navDropdown = signal<({ label: string; divider?: false } | { divider: true })[]>([]);
 
-  ngOnInit() {
+  constructor() {
     effect(() => {
       const user = this.auth.currentUser();
 
       if (user) {
-        // ===== Usuario logueado =====
         this.username.set(user.nombreUsuario);
         this.avatarUrl.set(user.imagenPerfil || null);
 
@@ -39,10 +39,8 @@ export class AppComponent {
           { label: 'Cerrar sesión' },
         ]);
       } else {
-        // ===== Usuario no logueado =====
         this.username.set('Invitado');
         this.avatarUrl.set(null);
-
         this.navLinks.set([]);
         this.navDropdown.set([]);
       }

@@ -55,7 +55,7 @@
           </ui-form-field>
         </div>
 
-        <!-- Fecha -->
+        <!-- Fecha nacimiento -->
         <ui-form-field label="Fecha de nacimiento" [control]="form.controls['fechaNacimiento']">
           <ng-template #control>
             <ui-input type="date" [control]="form.controls['fechaNacimiento']" />
@@ -73,21 +73,21 @@
             />
           </ng-template>
         </ui-form-field>
+
+        <!-- ================= BOTÓN ================= -->
+        <div class="mt-8 flex justify-between items-center">
+          <a routerLink="/login" class="text-sm text-silver hover:underline">
+            ¿Ya tenés cuenta? Iniciá sesión
+          </a>
+
+          <ui-button type="submit" variant="primary" [loading]="loading"> Crear cuenta </ui-button>
+        </div>
       </form>
 
       <!-- ================= Uploader (DERECHA) ================= -->
       <div class="w-48 flex flex-col items-center gap-3">
         <ui-image-uploader (fileSelected)="onFileSelected($event)" />
       </div>
-    </div>
-
-    <!-- ================= BOTÓN ================= -->
-    <div class="mt-8 flex justify-between items-center">
-      <a routerLink="/login" class="text-sm text-silver hover:underline">
-        ¿Ya tenés cuenta? Iniciá sesión
-      </a>
-
-      <ui-button type="submit" variant="primary" [loading]="loading"> Crear cuenta </ui-button>
     </div>
   </ui-card>
 </div>
