@@ -22,7 +22,8 @@
                 "input": "public"
               }
             ],
-            "styles": ["node_modules/sweetalert2/dist/sweetalert2.min.css", "src/styles.css"]
+            "styles": ["node_modules/sweetalert2/dist/sweetalert2.min.css", "src/styles.css"],
+            "allowedCommonJsDependencies": ["tailwindcss", "autoprefixer", "postcss"]
           },
           "configurations": {
             "production": {
