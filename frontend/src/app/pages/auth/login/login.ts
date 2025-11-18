@@ -4,7 +4,6 @@ import { Router, RouterLink } from '@angular/router';
 import { AlertService } from '../../../services/alert.service';
 import { AuthService } from '../../../services/auth.service';
 import {
-  NavbarComponent,
   CardComponent,
   FormFieldComponent,
   InputComponent,
@@ -22,8 +21,8 @@ import { firstValueFrom } from 'rxjs';
     InputComponent,
     ButtonComponent,
     ReactiveFormsModule,
-    RouterLink
-],
+    RouterLink,
+  ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })

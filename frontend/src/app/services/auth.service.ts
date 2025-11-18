@@ -9,9 +9,13 @@ export interface LoginResponse {
 
 export interface User {
   _id: string;
-  nombreUsuario: string;
+  nombre: string;
+  apellido: string;
   correo: string;
+  nombreUsuario: string;
   perfil: string;
+  fechaNacimiento?: string;
+  descripcion?: string;
   imagenPerfil?: string;
 }
 
