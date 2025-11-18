@@ -1,0 +1,42 @@
+/* Contenedor base */
+.container-click {
+  @apply max-w-3xl mx-auto px-4 mt-6 mb-10;
+}
+
+/* CARD DEL PERFIL */
+.profile-card {
+  @apply bg-white rounded-xl shadow-md p-6 mb-8 border border-gray-200;
+}
+
+/* Mensajes de carga */
+.loading {
+  @apply text-center text-gray-600 py-4;
+}
+
+/* Divider */
+.divider {
+  @apply border-t border-gray-300 my-6;
+}
+
+/* Título sección */
+.section-title {
+  @apply text-lg font-semibold text-[var(--delft-blue)] mb-4;
+}
+
+/* Grid tipo Instagram */
+.posts-grid {
+  @apply grid grid-cols-3 gap-3;
+}
+
+.grid-item {
+  @apply relative cursor-pointer;
+}
+
+.grid-image {
+  @apply w-full aspect-square object-cover rounded-lg hover:opacity-90 transition shadow;
+}
+
+/* Mensaje sin posts */
+.no-posts {
+  @apply text-center text-gray-600 mt-2 mb-4;
+}

@@ -9,3 +9,6 @@ export * from './textarea/textarea';
 export * from './navbar/navbar';
 export * from './spinner/spinner';
 export * from './password-hints/password-hints';
+export * from './post-card/post-card';
+export * from './profile/profile.component';
+export * from './post-modal/post-modal';

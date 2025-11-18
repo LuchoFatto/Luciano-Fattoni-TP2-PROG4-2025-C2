@@ -1,5 +1,6 @@
 <nav class="w-full bg-delft text-khaki shadow-md sticky top-0 z-50 overflow-visible">
-  <div class="flex items-center justify-between h-14 px-4 md:px-8">
+  <div class="flex items-center justify-between h-14 px-4 md:px-8 relative">
+    <!-- Logo -->
     <button
       class="font-bold text-xl md:text-2xl tracking-wide hover:text-silver transition select-none"
       (click)="logoClicked.emit()"
@@ -8,10 +9,11 @@
       {{ appName }}
     </button>
 
-    <div class="hidden md:flex items-center gap-6">
+    <!-- Links centrados -->
+    <div class="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
       @for (link of links; track link.label) {
       <button
-        class="text-sm lg:text-base hover:text-silver transition"
+        class="text-sm lg:text-base hover:text-silver transition whitespace-nowrap"
         (click)="linkClicked.emit(link)"
       >
         {{ link.label }}
@@ -19,6 +21,7 @@
       }
     </div>
 
+    <!-- Usuario a la derecha -->
     <div class="flex items-center gap-3">
       <div class="relative hidden md:flex items-center gap-3">
         <span class="font-medium text-sm max-w-[120px] truncate">

@@ -55,6 +55,20 @@ export class AppComponent {
     }
   }
 
+  linkClicked(link: { label: string }) {
+    if (link.label === 'Inicio') {
+      this.router.navigateByUrl('/posts');
+    }
+
+    if (link.label === 'Publicaciones') {
+      this.router.navigateByUrl('/posts');
+    }
+
+    if (link.label === 'Mi Perfil') {
+      this.router.navigateByUrl('/perfil');
+    }
+  }
+
   onDropdownClick(item: any) {
     if (item.label === 'Cerrar sesión') {
       this.auth.clearSession();

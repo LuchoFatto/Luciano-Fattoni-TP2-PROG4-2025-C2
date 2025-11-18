@@ -1,0 +1,110 @@
+/* =========================
+    Card general
+   ========================= */
+.post-card {
+  @apply bg-white rounded-xl shadow border border-gray-200 overflow-hidden mb-6;
+}
+
+/* =========================
+    HEADER
+   ========================= */
+.post-header {
+  @apply flex items-center justify-between px-4 py-3;
+}
+
+.post-author {
+  @apply flex items-center gap-3;
+}
+
+.author-avatar {
+  @apply w-10 h-10 rounded-full object-cover border border-gray-300;
+}
+
+.author-info {
+  @apply flex flex-col leading-tight;
+}
+
+.author-username {
+  @apply font-semibold text-[var(--delft-blue)];
+}
+
+.post-time {
+  @apply text-xs text-gray-500;
+}
+
+/* Botón eliminar */
+.delete-btn {
+  @apply text-red-500 hover:text-red-600 text-xl px-2;
+}
+
+/* =========================
+    IMAGEN
+   ========================= */
+.post-image {
+  @apply w-full max-h-[500px] object-cover bg-gray-100;
+}
+
+/* =========================
+    BODY
+   ========================= */
+.post-body {
+  @apply px-4 py-3;
+}
+
+/* =========================
+    Likes + interacción
+   ========================= */
+.interaction-row {
+  @apply flex items-center gap-3 mb-2;
+}
+
+/* Botón like/unlike */
+.like-toggle-btn {
+  @apply p-1 rounded-full hover:scale-110 transition-transform active:scale-95;
+}
+
+/* Tamaño del ícono */
+.icon {
+  @apply w-6 h-6;
+}
+
+/* Contador de likes */
+.likes-count {
+  @apply text-sm font-medium text-[var(--delft-blue)];
+}
+
+/* =========================
+    Descripción
+   ========================= */
+.description {
+  @apply text-sm text-[var(--delft-blue)];
+}
+
+.author-label {
+  @apply font-semibold mr-1;
+}
+
+/* =========================
+    Responsive
+   ========================= */
+@media (max-width: 480px) {
+  .post-card {
+    @apply rounded-lg;
+  }
+
+  .post-image {
+    @apply max-h-[380px];
+  }
+
+  .author-avatar {
+    @apply w-9 h-9;
+  }
+}
+
+.delete-btn {
+  @apply p-2 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-100 transition;
+}
+
+.delete-icon {
+  @apply w-5 h-5;
+}

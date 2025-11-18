@@ -1,1 +1,51 @@
-<p>profile works!</p>
+<div class="container-click animate-fade-in">
+  @if (loadingProfile()) {
+  <p class="loading">Cargando perfil...</p>
+
+  } @else if (profile()) {
+
+  <!-- CARD PRINCIPAL -->
+  <div class="profile-card">
+    <ui-profile
+      [profile]="profile()!"
+      [postsCount]="postsCount()"
+      [lastPosts]="lastPosts()"
+      (edit)="editProfile()"
+    />
+  </div>
+
+  <!-- LINEA -->
+  <div class="divider"></div>
+
+  <!-- =======================
+        TODAS TUS PUBLICACIONES
+      ======================= -->
+  <h3 class="section-title">Todas tus publicaciones</h3>
+
+  @if (loadingPosts()) {
+  <p class="loading">Cargando publicaciones...</p>
+
+  } @else if (allPosts().length === 0) {
+  <p class="no-posts">Todavía no tenés publicaciones.</p>
+
+  } @else {
+  <div class="posts-grid">
+    @for (post of allPosts(); track post._id) {
+    <div class="grid-item" (click)="openPost(post)">
+      <img [src]="post.imagenUrl" class="grid-image" alt="Publicación" loading="lazy" />
+    </div>
+    }
+  </div>
+  } }
+
+  <!-- MODAL -->
+  @if (selectedPost()) {
+  <ui-post-modal
+    [post]="selectedPost()!"
+    (closed)="closeModal()"
+    (like)="onLike($event)"
+    (unlike)="onUnlike($event)"
+    (delete)="onDelete($event)"
+  />
+  }
+</div>

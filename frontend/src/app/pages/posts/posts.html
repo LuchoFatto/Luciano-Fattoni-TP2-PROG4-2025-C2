@@ -1,1 +1,38 @@
-<p>posts works!</p>
+<div class="container-click animate-fade-in">
+  <!-- ===== ORDENAMIENTO ===== -->
+  <div class="order-bar">
+    <button class="order-btn" [class.active]="orden() === 'fecha'" (click)="changeOrder('fecha')">
+      Más recientes
+    </button>
+
+    <button class="order-btn" [class.active]="orden() === 'likes'" (click)="changeOrder('likes')">
+      Más populares
+    </button>
+  </div>
+
+  <!-- ===== LISTA DE PUBLICACIONES ===== -->
+  @if (loading()) {
+  <div class="loading-text">Cargando publicaciones...</div>
+  } @else { @for (post of posts(); track post._id) {
+  <ui-post-card
+    [post]="post"
+    (like)="likePost(post)"
+    (unlike)="unlikePost(post)"
+    (delete)="deletePost(post)"
+  />
+  }
+
+  <!-- No hay resultados -->
+  @if (posts().length === 0) {
+  <p class="no-posts">Todavía no hay publicaciones.</p>
+  }
+
+  <!-- ===== LOAD MORE ===== -->
+  @if (!noMorePosts() && posts().length > 0) {
+  <div class="load-more-container">
+    <button class="btn-load-more" [disabled]="loadingMore()" (click)="loadPosts()">
+      @if (!loadingMore()) { Ver más } @else { Cargando... }
+    </button>
+  </div>
+  } }
+</div>

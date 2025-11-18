@@ -1,0 +1,75 @@
+<div class="post-card animate-fade-in">
+  <!-- ===== HEADER ===== -->
+  <div class="post-header">
+    <div class="post-author">
+      <img
+        [src]="post.autor.imagenPerfil || 'https://cdn-icons-png.flaticon.com/512/9131/9131529.png'"
+        class="author-avatar"
+        alt="avatar"
+      />
+
+      <div class="author-info">
+        <span class="author-username">{{ post.autor.nombreUsuario }}</span>
+        <span class="post-time">{{ timeAgo }}</span>
+      </div>
+    </div>
+
+    @if (post.isMine) {
+    <button class="delete-btn" (click)="confirmDelete()" aria-label="Eliminar publicación">
+      <svg class="delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-7 0a1 1 0 011-1h4a1 1 0 011 1m-7 0h10"
+        />
+      </svg>
+    </button>
+    }
+  </div>
+
+  <!-- ===== IMAGEN ===== -->
+  @if (post.imagenUrl) {
+  <img [src]="post.imagenUrl" class="post-image" alt="imagen publicación" loading="lazy" />
+  }
+
+  <!-- ===== BODY ===== -->
+  <div class="post-body">
+    <div class="interaction-row">
+      <!-- Like / Unlike combinado -->
+      <button class="like-toggle-btn" (click)="toggleLike()" aria-label="Me gusta">
+        @if (!post.likedByMe) {
+        <!-- ICONO OUTLINE -->
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4.318 6.318a4.5 4.5 0 0 1 6.364 0L12 7.636l1.318-1.318a4.5
+                4.5 0 1 1 6.364 6.364L12 20.364l-7.682-7.682a4.5
+                4.5 0 0 1 0-6.364z"
+          />
+        </svg>
+        } @else {
+        <!-- ICONO SOLID -->
+        <svg class="icon text-red-600" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5
+                2.09C13.09 3.81 14.76 3 16.5 3 19.58 3
+                22 5.42 22 8.5c0 3.78-3.4 6.86-8.55
+                11.54L12 21.35z"
+          />
+        </svg>
+        }
+      </button>
+
+      <span class="likes-count">{{ post.likesCount }} me gusta</span>
+    </div>
+
+    <p class="description">
+      <span class="author-label">{{ post.autor.nombreUsuario }}:</span>
+      {{ post.descripcion }}
+    </p>
+  </div>
+</div>

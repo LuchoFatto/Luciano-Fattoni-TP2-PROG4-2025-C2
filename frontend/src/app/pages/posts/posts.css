@@ -1,0 +1,53 @@
+/* =========================
+  Barra de ordenamiento
+   ========================= */
+.order-bar {
+  @apply flex justify-center gap-4 mb-6;
+}
+
+.order-btn {
+  @apply px-4 py-2 rounded-lg text-sm font-medium
+        bg-white border border-gray-300 text-[var(--delft-blue)]
+        hover:bg-gray-100 transition;
+}
+
+.order-btn.active {
+  @apply bg-[var(--silver-lake-blue)] text-white border-transparent;
+}
+
+/* =========================
+  Mensajes y estados
+   ========================= */
+.loading-text {
+  @apply text-center text-gray-600 py-6;
+}
+
+.no-posts {
+  @apply text-center mt-8 text-[var(--delft-blue)] font-medium;
+}
+
+/* =========================
+  Load More button
+   ========================= */
+.load-more-container {
+  @apply flex justify-center my-6;
+}
+
+.btn-load-more {
+  @apply px-5 py-2 rounded-lg bg-[var(--silver-lake-blue)]
+        text-white font-medium shadow
+        hover:bg-[var(--delft-blue)] transition;
+}
+
+/* =========================
+  Responsive tweaks
+   ========================= */
+@media (max-width: 480px) {
+  .order-btn {
+    @apply text-xs px-3 py-2;
+  }
+
+  .btn-load-more {
+    @apply text-sm px-4 py-2;
+  }
+}

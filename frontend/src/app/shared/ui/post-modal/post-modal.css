@@ -1,0 +1,81 @@
+/* Fondo oscuro */
+.overlay {
+  @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998];
+}
+
+/* Modal */
+.modal {
+  @apply fixed top-1/2 left-1/2 bg-white rounded-xl shadow-xl z-[9999]
+        w-[90%] max-w-xl -translate-x-1/2 -translate-y-1/2 overflow-hidden;
+}
+
+/* Animación */
+@keyframes pop {
+  from {
+    transform: scale(0.85) translate(-50%, -50%);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+.animate-pop {
+  animation: pop 0.25s ease-out;
+}
+
+/* Botón cerrar */
+.btn-close {
+  @apply absolute top-2 right-3 text-3xl text-gray-500 hover:text-black;
+}
+
+/* Imagen */
+.modal-image {
+  @apply w-full max-h-[60vh] object-cover bg-black;
+}
+
+/* Info */
+.info {
+  @apply p-4;
+}
+
+.header {
+  @apply flex items-center justify-between mb-3;
+}
+
+.avatar {
+  @apply w-10 h-10 rounded-full border object-cover;
+}
+
+.user h3 {
+  @apply font-semibold text-[var(--delft-blue)];
+}
+
+.user .date {
+  @apply text-xs text-gray-500;
+}
+
+.description {
+  @apply mt-2 text-sm text-gray-800;
+}
+
+.likes-row {
+  @apply flex items-center gap-3 mt-4;
+}
+
+.btn-like {
+  @apply p-2 rounded-full hover:bg-gray-200 transition;
+}
+
+.icon {
+  @apply w-7 h-7 text-[var(--delft-blue)];
+}
+
+.icon.liked {
+  @apply text-red-600;
+}
+
+.btn-delete {
+  @apply text-sm text-red-600 font-semibold hover:underline;
+}

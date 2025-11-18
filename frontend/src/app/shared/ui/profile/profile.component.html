@@ -1,0 +1,41 @@
+<div class="profile-header">
+  <img
+    class="avatar"
+    [src]="profile.imagenPerfil || 'https://cdn-icons-png.flaticon.com/512/9131/9131529.png'"
+    alt="Avatar"
+  />
+
+  <div class="info">
+    <h2 class="username">{{ profile.nombreUsuario }}</h2>
+    <p class="fullname">{{ profile.nombre }} {{ profile.apellido }}</p>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-number">{{ postsCount }}</span>
+        <span class="stat-label">publicaciones</span>
+      </div>
+    </div>
+
+    <button class="edit-btn" (click)="onEditClick()">Editar perfil</button>
+  </div>
+</div>
+
+<!-- Descripción -->
+@if (profile.descripcion) {
+<p class="description">{{ profile.descripcion }}</p>
+}
+
+<!-- Últimas publicaciones -->
+@if (lastPosts.length > 0) {
+<h3 class="section-title">Últimas publicaciones</h3>
+
+<div class="last-posts-card">
+  <div class="last-posts">
+    @for (post of lastPosts; track post._id) {
+    <div class="last-post-wrapper">
+      <img [src]="post.imagenUrl" class="last-post-img" loading="lazy" />
+    </div>
+    }
+  </div>
+</div>
+}

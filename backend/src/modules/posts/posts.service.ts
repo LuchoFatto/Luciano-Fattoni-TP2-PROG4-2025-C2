@@ -43,10 +43,15 @@ export class PostsService {
   // Listar publicaciones (orden, filtro, paginación)
   async findAll(filtros: FilterPostsDto) {
     const { orden, usuario, limit = 10, offset = 0 } = filtros;
+
     const query: any = { activo: true };
 
-    if (usuario) query.autor = usuario;
+    // Convertir string | ObjectId SOLO si viene usuario
+    if (usuario) {
+      query.autor = new Types.ObjectId(usuario);
+    }
 
+    // Ordenamiento
     const sort: any = orden === 'likes' ? { likes: -1 } : { createdAt: -1 };
 
     const publicaciones = await this.postModel
