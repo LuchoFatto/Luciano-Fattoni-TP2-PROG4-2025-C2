@@ -67,6 +67,13 @@
       <span class="likes-count">{{ post.likesCount }} me gusta</span>
     </div>
 
+    <!-- ===== TÍTULO ===== -->
+    @if (post.titulo) {
+    <h2 class="post-title">
+      {{ post.titulo }}
+    </h2>
+    }
+
     <p class="description">
       <span class="author-label">{{ post.autor.nombreUsuario }}:</span>
       {{ post.descripcion }}

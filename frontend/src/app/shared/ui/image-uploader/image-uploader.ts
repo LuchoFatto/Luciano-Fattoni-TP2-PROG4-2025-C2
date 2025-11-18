@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
             />
           </svg>
           <p class="mb-1 text-sm text-gray-500">
-            <span class="font-semibold">Click para subir</span> o arrastra
+            <span class="font-semibold">Click para subir</span>
           </p>
           <p class="text-xs text-gray-400">PNG, JPG, GIF hasta 5MB</p>
           } @else {

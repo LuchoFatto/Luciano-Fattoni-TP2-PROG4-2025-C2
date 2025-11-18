@@ -72,4 +72,9 @@ export class PostsService {
   delete(postId: string) {
     return this.api.delete(`/posts/${postId}`);
   }
+
+  /** Crear publicación */
+  createPost(formData: FormData) {
+    return this.api.post<Post>('/posts', formData);
+  }
 }

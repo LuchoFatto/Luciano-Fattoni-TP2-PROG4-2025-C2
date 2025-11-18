@@ -108,3 +108,7 @@
 .delete-icon {
   @apply w-5 h-5;
 }
+
+.post-title {
+  @apply text-base font-semibold text-[var(--delft-blue)] mb-1 line-clamp-2;
+}

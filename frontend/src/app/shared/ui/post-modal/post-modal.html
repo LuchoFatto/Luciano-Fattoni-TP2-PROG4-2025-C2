@@ -27,9 +27,6 @@
       }
     </div>
 
-    <!-- Descripción -->
-    <p class="description">{{ post.descripcion }}</p>
-
     <!-- Like row -->
     <div class="likes-row">
       <button class="btn-like" (click)="toggleLike()">
@@ -59,5 +56,13 @@
 
       <span class="likes-count">{{ post.likesCount }} me gusta</span>
     </div>
+
+    <!-- ===== TÍTULO ===== -->
+    @if (post.titulo) {
+    <h2 class="modal-title">{{ post.titulo }}</h2>
+    }
+
+    <!-- Descripción -->
+    <p class="description">{{ post.descripcion }}</p>
   </div>
 </div>

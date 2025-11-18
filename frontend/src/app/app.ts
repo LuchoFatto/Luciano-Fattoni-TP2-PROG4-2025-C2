@@ -28,8 +28,8 @@ export class AppComponent {
         this.avatarUrl.set(user.imagenPerfil || null);
 
         this.navLinks.set([
-          { label: 'Inicio' },
           { label: 'Publicaciones' },
+          { label: 'Crear publicación' },
           { label: 'Mi Perfil' },
         ]);
 
@@ -55,17 +55,19 @@ export class AppComponent {
     }
   }
 
-  linkClicked(link: { label: string }) {
-    if (link.label === 'Inicio') {
-      this.router.navigateByUrl('/posts');
-    }
+  onNavLinkClick(link: any) {
+    switch (link.label) {
+      case 'Publicaciones':
+        this.router.navigateByUrl('/posts');
+        break;
 
-    if (link.label === 'Publicaciones') {
-      this.router.navigateByUrl('/posts');
-    }
+      case 'Crear publicación':
+        this.router.navigateByUrl('/crear');
+        break;
 
-    if (link.label === 'Mi Perfil') {
-      this.router.navigateByUrl('/perfil');
+      case 'Mi Perfil':
+        this.router.navigateByUrl('/perfil');
+        break;
     }
   }
 

@@ -1,0 +1,43 @@
+<div class="flex justify-center py-10">
+  <ui-card class="max-w-3xl w-full">
+    <!-- Título -->
+    <h1 class="text-2xl font-bold mb-6 text-center">Crear publicación</h1>
+
+    <!-- Layout: formulario izquierda + uploader derecha -->
+    <div class="flex gap-10 items-start">
+      <!-- ========== FORM IZQUIERDA ========== -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex-1 space-y-4">
+        <!-- Título -->
+        <ui-form-field label="Título" [control]="form.controls['titulo']">
+          <ng-template #control>
+            <ui-input placeholder="Ej: Mi nuevo día de arte" [control]="form.controls['titulo']" />
+          </ng-template>
+        </ui-form-field>
+
+        <!-- Descripción -->
+        <ui-form-field label="Descripción" [control]="form.controls['descripcion']">
+          <ng-template #control>
+            <ui-textarea
+              class="h-32"
+              placeholder="Escribe algo sobre tu publicación..."
+              [maxLength]="300"
+              [showCount]="true"
+              [control]="form.controls['descripcion']"
+            />
+          </ng-template>
+        </ui-form-field>
+
+        <!-- Botón publicar -->
+        <div class="mt-6 flex justify-end">
+          <ui-button type="submit" variant="primary" [loading]="loading"> Publicar </ui-button>
+        </div>
+      </form>
+
+      <!-- ========== Uploader derecha ========== -->
+      <div class="w-48 flex flex-col items-center gap-3">
+        <ui-image-uploader (fileSelected)="onFileSelected($event)" />
+        <p class="text-xs text-gray-500 text-center">Imagen opcional</p>
+      </div>
+    </div>
+  </ui-card>
+</div>
