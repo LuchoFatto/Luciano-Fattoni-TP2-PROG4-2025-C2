@@ -10,11 +10,11 @@
 
       <div class="author-info">
         <span class="author-username">{{ post.autor.nombreUsuario }}</span>
-        <span class="post-time">{{ timeAgo }}</span>
+        <span class="post-time">{{ post.createdAt | relativeTime }}</span>
       </div>
     </div>
 
-    @if (post.isMine) {
+    @if (canDelete) {
     <button class="delete-btn" (click)="onDeleteClick($event)" aria-label="Eliminar publicación">
       <svg class="delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
         <path
@@ -82,13 +82,13 @@
     <!-- ===== TÍTULO ===== -->
     @if (post.titulo) {
     <h2 class="post-title">
-      {{ post.titulo }}
+      {{ post.titulo | truncate : 60 }}
     </h2>
     }
 
     <p class="description">
       <span class="author-label">{{ post.autor.nombreUsuario }}:</span>
-      {{ post.descripcion }}
+      {{ post.descripcion | truncate : 150 }}
     </p>
   </div>
 </div>

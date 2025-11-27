@@ -3,10 +3,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas/user.schema';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
+import { SupabaseModule } from 'src/supabase/supabase.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    SupabaseModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

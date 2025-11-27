@@ -14,6 +14,7 @@ export interface User {
   correo: string;
   nombreUsuario: string;
   perfil: string;
+  activo: boolean;
   fechaNacimiento?: string;
   descripcion?: string;
   imagenPerfil?: string;

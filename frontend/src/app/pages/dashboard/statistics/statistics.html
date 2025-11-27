@@ -1,0 +1,31 @@
+<div class="statistics-container">
+  <!-- ===== HEADER ===== -->
+  <div class="statistics-header">
+    <h1 class="statistics-title">Estadísticas</h1>
+    <p class="statistics-subtitle">Métricas generales de la plataforma</p>
+  </div>
+
+  <!-- ===== GRÁFICOS ===== -->
+  <div class="charts-grid">
+    <!-- Gráfico 1: Publicaciones por Usuario (Barras) -->
+    <ui-card class="chart-card">
+      <div class="chart-container">
+        <canvas id="postsByUserChart"></canvas>
+      </div>
+    </ui-card>
+
+    <!-- Gráfico 2: Distribución de Posts Activos/Inactivos (Doughnut) -->
+    <ui-card class="chart-card">
+      <div class="chart-container">
+        <canvas id="postsStatusChart"></canvas>
+      </div>
+    </ui-card>
+
+    <!-- Gráfico 3: Posts Más Populares por Likes (Barras Horizontales) -->
+    <ui-card class="chart-card">
+      <div class="chart-container">
+        <canvas id="postsByLikesChart"></canvas>
+      </div>
+    </ui-card>
+  </div>
+</div>

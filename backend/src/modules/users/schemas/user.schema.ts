@@ -21,6 +21,9 @@ export class User extends Document {
   @Prop({ default: 'usuario' })
   perfil: string;
 
+  @Prop({ default: true })
+  activo: boolean;
+
   @Prop()
   fechaNacimiento: string;
 

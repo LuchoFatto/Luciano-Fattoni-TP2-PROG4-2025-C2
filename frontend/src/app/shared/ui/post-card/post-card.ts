@@ -2,11 +2,13 @@ import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostUI } from '../../../services/posts.service';
 import { AlertService } from '../../../services/alert.service';
+import { AuthService } from '../../../services/auth.service';
+import { RelativeTimePipe, TruncatePipe } from '../../pipes';
 
 @Component({
   selector: 'ui-post-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RelativeTimePipe, TruncatePipe],
   templateUrl: './post-card.html',
   styleUrl: './post-card.css',
 })
@@ -20,6 +22,18 @@ export class PostCardComponent {
   @Output() comment = new EventEmitter<void>();
 
   private alerts = inject(AlertService);
+  private auth = inject(AuthService);
+
+  /** Verifica si el usuario actual es administrador */
+  get isAdmin(): boolean {
+    const user = this.auth.currentUser();
+    return user?.perfil === 'administrador';
+  }
+
+  /** Verifica si se debe mostrar el botón eliminar */
+  get canDelete(): boolean {
+    return this.post.isMine || this.isAdmin;
+  }
 
   /** Fecha tipo "hace X min" */
   get timeAgo(): string {

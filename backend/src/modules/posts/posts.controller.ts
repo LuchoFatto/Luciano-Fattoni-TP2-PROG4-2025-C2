@@ -47,11 +47,11 @@ export class PostsController {
     return this.postsService.findOne(id, userId);
   }
 
-  // Baja lógica
+  // Baja lógica (dueño o admin)
   @Delete(':id')
   async remove(@Param('id') id: string, @Req() req: any) {
-    const { userId } = req.user;
-    return this.postsService.softDelete(id, userId);
+    const { userId, perfil } = req.user;
+    return this.postsService.softDelete(id, userId, perfil);
   }
 
   //Agregar me gusta

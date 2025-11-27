@@ -30,9 +30,102 @@
   <div class="posts-grid">
     @for (post of allPosts(); track post._id) {
     <div class="grid-item" (click)="openPost(post)">
+      @if (post.imagenUrl) {
       <img [src]="post.imagenUrl" class="grid-image" alt="Publicación" loading="lazy" />
+      } @else {
+      <!-- Post sin imagen - estilo hilo de Twitter -->
+      <div class="text-post">
+        <div class="text-post-header">
+          <h4 class="text-post-title">{{ post.titulo }}</h4>
+        </div>
+        <p class="text-post-description">{{ post.descripcion }}</p>
+        <div class="text-post-footer">
+          <span class="text-post-meta">{{ post.likesCount }} me gusta</span>
+          <span class="text-post-meta">•</span>
+          <span class="text-post-meta">{{ post.createdAt | date : 'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+      }
     </div>
     }
   </div>
   } }
 </div>
+
+<!-- Modal de Editar Perfil -->
+@if (showEditModal()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+    <h2 class="text-2xl font-bold mb-6">Editar Perfil</h2>
+
+    <form [formGroup]="editForm" (ngSubmit)="onSubmitEdit()" class="space-y-4">
+      <!-- Imagen de Perfil -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Imagen de Perfil</label>
+        @if (editImagePreview()) {
+        <div class="mb-3">
+          <img
+            [src]="editImagePreview()!"
+            class="w-32 h-32 rounded-full object-cover mx-auto border-4 border-blue-500"
+            alt="Preview"
+          />
+        </div>
+        }
+        <ui-image-uploader fieldName="imagenPerfil" (fileSelected)="onImageChange($event)" />
+      </div>
+
+      <!-- Nombre -->
+      <ui-input
+        label="Nombre"
+        [control]="editForm.controls.nombre"
+        placeholder="Ingresa tu nombre"
+        type="text"
+      />
+
+      <!-- Apellido -->
+      <ui-input
+        label="Apellido"
+        [control]="editForm.controls.apellido"
+        placeholder="Ingresa tu apellido"
+        type="text"
+      />
+
+      <!-- Descripción -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
+        <textarea
+          formControlName="descripcion"
+          rows="3"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Cuéntanos sobre ti..."
+        ></textarea>
+      </div>
+
+      <!-- Fecha de Nacimiento -->
+      <ui-input
+        label="Fecha de Nacimiento"
+        [control]="editForm.controls.fechaNacimiento"
+        type="date"
+      />
+
+      <!-- Botones -->
+      <div class="flex gap-3 mt-6">
+        <button
+          type="button"
+          (click)="closeEditModal()"
+          class="flex-1 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="editForm.invalid"
+          class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}

@@ -65,6 +65,21 @@
   @apply mx-auto; /* las centra dentro de cada celda */
 }
 
+/* Post sin imagen - versión mini */
+.text-post-mini {
+  @apply w-full h-full bg-gradient-to-br from-blue-50 to-purple-50;
+  @apply border border-blue-200 rounded-lg p-2;
+  @apply flex flex-col justify-between;
+}
+
+.text-post-mini-title {
+  @apply text-xs font-semibold text-gray-800 line-clamp-3;
+}
+
+.text-post-mini-meta {
+  @apply text-xs text-blue-600 font-medium mt-auto;
+}
+
 /* CARD envolvente */
 .last-posts-card {
   @apply bg-white rounded-xl border border-gray-200 p-4 shadow-sm mb-6;

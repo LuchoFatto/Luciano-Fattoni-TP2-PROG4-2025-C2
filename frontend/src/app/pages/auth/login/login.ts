@@ -11,6 +11,7 @@ import {
   ButtonComponent,
 } from '../../../shared/ui';
 import { strongPasswordValidator } from '../../../shared/validators/custom-validators';
+import { AutofocusDirective } from '../../../shared/directives';
 import { firstValueFrom } from 'rxjs';
 import { LoadingService } from '../../../services/loading.service';
 
@@ -24,6 +25,7 @@ import { LoadingService } from '../../../services/loading.service';
     ButtonComponent,
     ReactiveFormsModule,
     RouterLink,
+    AutofocusDirective,
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',

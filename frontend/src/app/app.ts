@@ -6,6 +6,7 @@ import { LoadingOverlayComponent } from './shared/ui/loading-overlay/loading-ove
 import { LoadingService } from './services/loading.service';
 import { SessionTimerService } from './services/session-timer.service';
 import { SessionWarningModalComponent } from './shared/ui';
+import { AlertService } from './services/alert.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -19,6 +20,7 @@ export class AppComponent {
   private auth = inject(AuthService);
   private loading = inject(LoadingService);
   private sessionTimer = inject(SessionTimerService);
+  private alert = inject(AlertService);
 
   // Signals
   username = signal<string>('Invitado');
@@ -55,11 +57,19 @@ export class AppComponent {
           { label: 'Mi Perfil' },
         ]);
 
-        this.navDropdown.set([
-          { label: 'Configuración' },
-          { divider: true },
-          { label: 'Cerrar sesión' },
-        ]);
+        // Dropdown para usuarios normales y administradores
+        const dropdownItems: ({ label: string; divider?: false } | { divider: true })[] = [];
+
+        // Si es admin, agregar opción de Dashboard
+        if (user.perfil === 'administrador') {
+          dropdownItems.push({ label: 'Dashboard' });
+          dropdownItems.push({ label: 'Estadísticas' });
+          dropdownItems.push({ divider: true });
+        }
+
+        dropdownItems.push({ label: 'Cerrar sesión' });
+
+        this.navDropdown.set(dropdownItems);
       } else {
         this.username.set('Invitado');
         this.avatarUrl.set(null);
@@ -125,13 +135,39 @@ export class AppComponent {
   }
 
   onDropdownClick(item: any) {
-    if (item.label === 'Cerrar sesión') {
-      this.auth.clearSession();
-      this.sessionTimer.stop();
-      this.router.navigateByUrl('/login');
+    switch (item.label) {
+      case 'Dashboard':
+        this.router.navigateByUrl('/dashboard/usuarios');
+        break;
+
+      case 'Estadísticas':
+        this.router.navigateByUrl('/dashboard/estadisticas');
+        break;
+
+      case 'Cerrar sesión':
+        this.handleLogout();
+        break;
     }
   }
 
+  /**
+   * Maneja el cierre de sesión con confirmación
+   */
+  async handleLogout() {
+    const confirmed = await this.alert.confirm(
+      '¿Cerrar sesión?',
+      'Estás a punto de cerrar tu sesión. ¿Deseas continuar?',
+      'Sí, cerrar sesión',
+      'Cancelar'
+    );
+
+    if (confirmed) {
+      this.auth.clearSession();
+      this.sessionTimer.stop();
+      this.alert.success('Sesión cerrada correctamente');
+      this.router.navigateByUrl('/login');
+    }
+  }
   /**
    * Maneja el evento de extender sesión desde el modal
    */

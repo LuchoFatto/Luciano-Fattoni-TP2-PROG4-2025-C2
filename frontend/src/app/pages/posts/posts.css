@@ -1,4 +1,59 @@
 /* =========================
+  Barra de búsqueda
+   ========================= */
+.search-bar {
+  @apply mb-6;
+}
+
+.search-input-container {
+  @apply relative flex items-center;
+}
+
+.search-icon {
+  @apply absolute left-3 w-5 h-5 text-gray-400 pointer-events-none;
+}
+
+.search-input {
+  @apply w-full pl-10 pr-10 py-3 rounded-lg border border-gray-300
+         bg-white text-[var(--delft-blue)]
+         focus:outline-none focus:ring-2 focus:ring-[var(--silver-lake-blue)] focus:border-transparent
+         transition;
+}
+
+.clear-search-btn {
+  @apply absolute right-3 w-5 h-5 text-gray-400
+         hover:text-[var(--delft-blue)] transition cursor-pointer;
+}
+
+.clear-search-btn svg {
+  @apply w-full h-full;
+}
+
+/* =========================
+  Post wrapper con highlight
+   ========================= */
+.post-wrapper {
+  @apply mb-4;
+}
+
+.highlight-info {
+  @apply bg-gray-50 border border-gray-200 rounded-lg p-4 mt-2
+         text-sm;
+}
+
+.highlight-section {
+  @apply mb-2 last:mb-0;
+}
+
+.highlight-section strong {
+  @apply text-[var(--delft-blue)] font-semibold mr-2;
+}
+
+.highlight-section span {
+  @apply text-gray-700;
+}
+
+/* =========================
   Barra de ordenamiento
    ========================= */
 .order-bar {

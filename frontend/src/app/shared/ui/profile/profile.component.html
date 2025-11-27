@@ -33,7 +33,15 @@
   <div class="last-posts">
     @for (post of lastPosts; track post._id) {
     <div class="last-post-wrapper">
+      @if (post.imagenUrl) {
       <img [src]="post.imagenUrl" class="last-post-img" loading="lazy" />
+      } @else {
+      <!-- Post sin imagen - texto simple -->
+      <div class="text-post-mini">
+        <p class="text-post-mini-title">{{ post.titulo }}</p>
+        <span class="text-post-mini-meta">{{ post.likesCount }} ♥</span>
+      </div>
+      }
     </div>
     }
   </div>

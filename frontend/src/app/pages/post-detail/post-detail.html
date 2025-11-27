@@ -10,7 +10,7 @@
 
   <!-- Modal Container (detiene propagación para no cerrar al hacer click adentro) -->
   @if (!loadingPost() && post()) {
-  <div class="modal-container" (click)="$event.stopPropagation()">
+  <div class="modal-container" (click)="$event.stopPropagation()" (appClickOutside)="goBack()">
     <!-- Botón cerrar (X) -->
     <button class="close-button" (click)="goBack()" aria-label="Cerrar">
       <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">

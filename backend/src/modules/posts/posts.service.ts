@@ -51,12 +51,42 @@ export class PostsService {
       query.autor = new Types.ObjectId(usuario);
     }
 
-    // Ordenamiento
-    const sort: any = orden === 'likes' ? { likes: -1 } : { createdAt: -1 };
+    // Si ordenamos por likes, usamos aggregation
+    if (orden === 'likes') {
+      const pipeline: any[] = [
+        { $match: query },
+        {
+          $addFields: {
+            likesCount: { $size: '$likes' },
+          },
+        },
+        { $sort: { likesCount: -1, createdAt: -1 } },
+        { $skip: Number(offset) },
+        { $limit: Number(limit) },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'autor',
+            foreignField: '_id',
+            as: 'autor',
+          },
+        },
+        { $unwind: '$autor' },
+        {
+          $project: {
+            'autor.password': 0,
+            'autor.activo': 0,
+          },
+        },
+      ];
 
+      return this.postModel.aggregate(pipeline).exec();
+    }
+
+    // Ordenamiento por fecha (default)
     const publicaciones = await this.postModel
       .find(query)
-      .sort(sort)
+      .sort({ createdAt: -1 })
       .skip(Number(offset))
       .limit(Number(limit))
       .populate('autor', 'nombreUsuario imagenPerfil')
@@ -83,14 +113,17 @@ export class PostsService {
     return post;
   }
 
-  // Baja logica
-  async softDelete(postId: string, userId: string) {
+  // Baja logica (usuario dueño o admin)
+  async softDelete(postId: string, userId: string, perfil: string) {
     const post = await this.postModel.findById(postId);
     if (!post) throw new NotFoundException('Publicación no encontrada');
 
     const isOwner = post.autor.toString() === userId;
-    if (!isOwner)
+    const isAdmin = perfil === 'administrador';
+
+    if (!isOwner && !isAdmin) {
       throw new ForbiddenException('No tienes permiso para eliminar este post');
+    }
 
     post.activo = false;
     await post.save();

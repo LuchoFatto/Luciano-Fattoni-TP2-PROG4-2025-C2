@@ -1,4 +1,49 @@
 <div class="container-click animate-fade-in">
+  <!-- ===== BARRA DE BÚSQUEDA ===== -->
+  <div class="search-bar">
+    <div class="search-input-container">
+      <svg
+        class="search-icon"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        ></path>
+      </svg>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar por título, descripción o autor..."
+        [value]="searchTerm()"
+        (input)="onSearchChange($event)"
+        appAutofocus
+      />
+      @if (searchTerm()) {
+      <button class="clear-search-btn" (click)="clearSearch()">
+        <svg
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+      }
+    </div>
+  </div>
+
   <!-- ===== ORDENAMIENTO ===== -->
   <div class="order-bar">
     <button class="order-btn" [class.active]="orden() === 'fecha'" (click)="changeOrder('fecha')">
@@ -19,16 +64,34 @@
   </div>
   }
 
-  <!-- Renderizar posts -->
-  @for (post of posts(); track post._id) {
-  <ui-post-card
-    [post]="post"
-    (open)="openPost(post)"
-    (comment)="openPost(post)"
-    (like)="likePost(post)"
-    (unlike)="unlikePost(post)"
-    (delete)="deletePost(post)"
-  />
+  <!-- Renderizar posts filtrados con highlight -->
+  @for (post of filteredPosts(); track post._id) {
+  <div class="post-wrapper">
+    <ui-post-card
+      [post]="post"
+      (open)="openPost(post)"
+      (comment)="openPost(post)"
+      (like)="likePost(post)"
+      (unlike)="unlikePost(post)"
+      (delete)="deletePost(post)"
+    />
+    @if (searchTerm()) {
+    <div class="highlight-info">
+      <div class="highlight-section">
+        <strong>Título:</strong>
+        <span [innerHTML]="post.titulo | highlight : searchTerm()"></span>
+      </div>
+      <div class="highlight-section">
+        <strong>Descripción:</strong>
+        <span [innerHTML]="post.descripcion | highlight : searchTerm()"></span>
+      </div>
+      <div class="highlight-section">
+        <strong>Autor:</strong>
+        <span [innerHTML]="post.autor.nombreUsuario | highlight : searchTerm()"></span>
+      </div>
+    </div>
+    }
+  </div>
   }
 
   <!-- No hay publicaciones - mensaje -->
@@ -36,8 +99,13 @@
   <p class="no-posts">Todavía no hay publicaciones.</p>
   }
 
+  <!-- No hay resultados de búsqueda -->
+  @if (searchTerm() && filteredPosts().length === 0 && posts().length > 0) {
+  <p class="no-posts">No se encontraron publicaciones con el término "{{ searchTerm() }}"</p>
+  }
+
   <!-- ===== LOAD MORE ===== -->
-  @if (!noMorePosts() && posts().length > 0) {
+  @if (!noMorePosts() && posts().length > 0 && !searchTerm()) {
   <div class="load-more-container">
     <button class="btn-load-more" [disabled]="loadingMore()" (click)="loadPosts()">
       @if (!loadingMore()) { Ver más } @else {

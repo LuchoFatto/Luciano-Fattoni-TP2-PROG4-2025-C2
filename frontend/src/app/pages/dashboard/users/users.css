@@ -1,0 +1,141 @@
+/* ========================================
+   DASHBOARD CONTAINER
+======================================== */
+.dashboard-container {
+  @apply max-w-7xl mx-auto px-4 py-8;
+}
+
+/* ========================================
+   HEADER
+======================================== */
+.dashboard-header {
+  @apply flex justify-between items-center mb-8;
+}
+
+.dashboard-title {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+/* ========================================
+   FORMULARIO
+======================================== */
+.form-section {
+  @apply mb-8;
+}
+
+.form-card {
+  @apply w-full;
+}
+
+.form-title {
+  @apply text-xl font-semibold text-gray-800 mb-4;
+}
+
+.user-form {
+  @apply space-y-4;
+}
+
+.form-row {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.form-group {
+  @apply space-y-2;
+}
+
+.label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+/* Radio buttons */
+.radio-group {
+  @apply flex gap-6;
+}
+
+.radio-label {
+  @apply flex items-center gap-2 cursor-pointer;
+}
+
+.radio-input {
+  @apply w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500;
+}
+
+.radio-text {
+  @apply text-sm text-gray-700;
+}
+
+.submit-btn {
+  @apply w-full mt-6;
+}
+
+/* ========================================
+   USERS GRID
+======================================== */
+.users-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+/* ========================================
+   USER CARD
+======================================== */
+.user-card {
+  @apply flex flex-col gap-4;
+}
+
+.user-avatar-container {
+  @apply relative flex justify-center;
+}
+
+.user-avatar {
+  @apply w-24 h-24 rounded-full object-cover border-4 border-gray-100;
+}
+
+.inactive-badge {
+  @apply absolute top-0 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded-full;
+}
+
+/* ========================================
+   USER INFO
+======================================== */
+.user-info {
+  @apply text-center space-y-1;
+}
+
+.user-name {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.user-username {
+  @apply text-sm text-gray-600;
+}
+
+.user-email {
+  @apply text-sm text-gray-500;
+}
+
+/* Badges */
+.admin-badge {
+  @apply inline-block mt-2 bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full font-medium;
+}
+
+.user-badge {
+  @apply inline-block mt-2 bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full font-medium;
+}
+
+/* ========================================
+   USER ACTIONS
+======================================== */
+.user-actions {
+  @apply flex justify-center mt-auto;
+}
+
+.action-btn {
+  @apply w-full;
+}
+
+/* ========================================
+   EMPTY STATE
+======================================== */
+.empty-state {
+  @apply col-span-full text-center py-12 text-gray-500;
+}

@@ -28,4 +28,55 @@ export class UsersService {
   async findById(id: string) {
     return this.userModel.findById(id);
   }
+
+  /**
+   * Actualiza el perfil del usuario logueado
+   */
+  async updateProfile(id: string, updateData: any) {
+    const user = await this.userModel.findById(id);
+    if (!user) return null;
+
+    // Actualizar campos permitidos
+    if (updateData.nombre !== undefined) user.nombre = updateData.nombre;
+    if (updateData.apellido !== undefined) user.apellido = updateData.apellido;
+    if (updateData.descripcion !== undefined)
+      user.descripcion = updateData.descripcion;
+    if (updateData.fechaNacimiento !== undefined)
+      user.fechaNacimiento = updateData.fechaNacimiento;
+
+    return user.save();
+  }
+
+  // =============================
+  //   MÉTODOS ADMIN
+  // =============================
+
+  /**
+   * Lista todos los usuarios (sin passwords)
+   */
+  async findAll() {
+    return this.userModel.find().select('-password').exec();
+  }
+
+  /**
+   * Deshabilita un usuario (baja lógica)
+   */
+  async disableUser(id: string) {
+    const user = await this.userModel.findById(id);
+    if (!user) return null;
+
+    user.activo = false;
+    return user.save();
+  }
+
+  /**
+   * Habilita un usuario (alta lógica)
+   */
+  async enableUser(id: string) {
+    const user = await this.userModel.findById(id);
+    if (!user) return null;
+
+    user.activo = true;
+    return user.save();
+  }
 }

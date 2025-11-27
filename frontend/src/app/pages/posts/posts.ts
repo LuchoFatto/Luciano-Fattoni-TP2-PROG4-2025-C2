@@ -1,16 +1,18 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostsService, PostUI } from '../../services/posts.service';
 import { AlertService } from '../../services/alert.service';
 import { PostCardComponent, SpinnerComponent } from '../../shared/ui';
 import { LoadingService } from '../../services/loading.service';
+import { HighlightPipe } from '../../shared/pipes';
+import { AutofocusDirective } from '../../shared/directives';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-posts',
   standalone: true,
-  imports: [CommonModule, PostCardComponent, SpinnerComponent],
+  imports: [CommonModule, PostCardComponent, SpinnerComponent, HighlightPipe, AutofocusDirective],
   templateUrl: './posts.html',
   styleUrl: './posts.css',
 })
@@ -24,6 +26,20 @@ export class Posts {
   posts = signal<PostUI[]>([]);
   loadingMore = signal(false);
   orden = signal<'fecha' | 'likes'>('fecha');
+  searchTerm = signal<string>('');
+
+  // Posts filtrados por búsqueda
+  filteredPosts = computed(() => {
+    const search = this.searchTerm().toLowerCase().trim();
+    if (!search) return this.posts();
+
+    return this.posts().filter(
+      (post) =>
+        post.titulo.toLowerCase().includes(search) ||
+        post.descripcion.toLowerCase().includes(search) ||
+        post.autor.nombreUsuario.toLowerCase().includes(search)
+    );
+  });
 
   // Parámetros de paginación
   limit = 5;
@@ -140,5 +156,16 @@ export class Posts {
     if (orden === this.orden()) return;
     this.orden.set(orden);
     this.loadPosts(true); // recargar lista
+  }
+
+  /** Actualizar término de búsqueda */
+  onSearchChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm.set(input.value);
+  }
+
+  /** Limpiar búsqueda */
+  clearSearch() {
+    this.searchTerm.set('');
   }
 }

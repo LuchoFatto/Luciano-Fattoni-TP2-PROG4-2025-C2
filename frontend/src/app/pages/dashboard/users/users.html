@@ -1,0 +1,185 @@
+<div class="dashboard-container">
+  <!-- ===== HEADER ===== -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Gestión de Usuarios</h1>
+    <ui-button [variant]="showForm() ? 'secondary' : 'primary'" (click)="toggleForm()">
+      {{ showForm() ? 'Cancelar' : '+ Nuevo Usuario' }}
+    </ui-button>
+  </div>
+
+  <!-- ===== FORMULARIO CREAR USUARIO ===== -->
+  @if (showForm()) {
+  <div class="form-section">
+    <ui-card class="form-card">
+      <h2 class="form-title">Crear Nuevo Usuario</h2>
+
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
+        <!-- Nombre y Apellido -->
+        <div class="form-row">
+          <ui-form-field label="Nombre" [control]="userForm.controls['nombre']">
+            <ng-template #control>
+              <ui-input [control]="userForm.controls['nombre']" placeholder="Ingresá el nombre" />
+            </ng-template>
+          </ui-form-field>
+
+          <ui-form-field label="Apellido" [control]="userForm.controls['apellido']">
+            <ng-template #control>
+              <ui-input
+                [control]="userForm.controls['apellido']"
+                placeholder="Ingresá el apellido"
+              />
+            </ng-template>
+          </ui-form-field>
+        </div>
+
+        <!-- Email y Username -->
+        <div class="form-row">
+          <ui-form-field label="Correo electrónico" [control]="userForm.controls['correo']">
+            <ng-template #control>
+              <ui-input
+                [control]="userForm.controls['correo']"
+                type="email"
+                placeholder="correo@ejemplo.com"
+              />
+            </ng-template>
+          </ui-form-field>
+
+          <ui-form-field label="Nombre de usuario" [control]="userForm.controls['nombreUsuario']">
+            <ng-template #control>
+              <ui-input
+                [control]="userForm.controls['nombreUsuario']"
+                placeholder="nombreusuario"
+              />
+            </ng-template>
+          </ui-form-field>
+        </div>
+
+        <!-- Password -->
+        <ui-form-field label="Contraseña" [control]="userForm.controls['password']">
+          <ng-template #control>
+            <ui-input
+              [control]="userForm.controls['password']"
+              type="password"
+              placeholder="Mínimo 8 caracteres"
+            />
+          </ng-template>
+        </ui-form-field>
+
+        <!-- Perfil - Radio Buttons -->
+        <div class="form-group">
+          <label class="label">Perfil</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" formControlName="perfil" value="usuario" class="radio-input" />
+              <span class="radio-text">Usuario</span>
+            </label>
+
+            <label class="radio-label">
+              <input
+                type="radio"
+                formControlName="perfil"
+                value="administrador"
+                class="radio-input"
+              />
+              <span class="radio-text">Administrador</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Fecha Nacimiento -->
+        <ui-form-field
+          label="Fecha de nacimiento (opcional)"
+          [control]="userForm.controls['fechaNacimiento']"
+        >
+          <ng-template #control>
+            <ui-input [control]="userForm.controls['fechaNacimiento']" type="date" />
+          </ng-template>
+        </ui-form-field>
+
+        <!-- Descripción -->
+        <ui-form-field label="Descripción (opcional)" [control]="userForm.controls['descripcion']">
+          <ng-template #control>
+            <ui-input
+              [control]="userForm.controls['descripcion']"
+              placeholder="Breve descripción"
+            />
+          </ng-template>
+        </ui-form-field>
+
+        <!-- Imagen -->
+        <div class="form-group">
+          <label class="label">Imagen de perfil (opcional)</label>
+          <ui-image-uploader (fileSelected)="onFileSelected($event)" />
+        </div>
+
+        <!-- Submit -->
+        <ui-button type="submit" [variant]="'primary'" class="submit-btn">
+          Crear Usuario
+        </ui-button>
+      </form>
+    </ui-card>
+  </div>
+  }
+
+  <!-- ===== LISTA DE USUARIOS ===== -->
+  <div class="users-grid">
+    @for (user of usuarios(); track user._id) {
+    <ui-card class="user-card">
+      <!-- Avatar -->
+      <div class="user-avatar-container">
+        <img
+          [src]="user.imagenPerfil || 'https://cdn-icons-png.flaticon.com/512/9131/9131529.png'"
+          [alt]="user.nombreUsuario"
+          class="user-avatar"
+        />
+        @if (!user.activo) {
+        <span class="inactive-badge">Inactivo</span>
+        }
+      </div>
+
+      <!-- Info -->
+      <div class="user-info">
+        <h3 class="user-name">{{ user.nombre }} {{ user.apellido }}</h3>
+        <p class="user-username">@{{ user.nombreUsuario }}</p>
+        <p class="user-email">{{ user.correo }}</p>
+
+        <!-- Badge perfil -->
+        @if (user.perfil === 'administrador') {
+        <span class="admin-badge">Admin</span>
+        } @else {
+        <span class="user-badge">Usuario</span>
+        }
+      </div>
+
+      <!-- Acciones -->
+      <div class="user-actions">
+        @if (user.activo) {
+        <ui-button
+          [variant]="'danger'"
+          (click)="disableUser(user)"
+          class="action-btn"
+          appTooltip="Deshabilitar acceso del usuario"
+          [tooltipPosition]="'top'"
+        >
+          Deshabilitar
+        </ui-button>
+        } @else {
+        <ui-button
+          [variant]="'primary'"
+          (click)="enableUser(user)"
+          class="action-btn"
+          appTooltip="Habilitar acceso del usuario"
+          [tooltipPosition]="'top'"
+        >
+          Habilitar
+        </ui-button>
+        }
+      </div>
+    </ui-card>
+    } @empty {
+    <div class="empty-state">
+      <p>No hay usuarios registrados</p>
+    </div>
+    }
+  </div>
+</div>

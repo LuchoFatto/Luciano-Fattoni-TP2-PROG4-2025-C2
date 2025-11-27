@@ -78,6 +78,12 @@ export class AuthService {
     if (!valid)
       throw new UnauthorizedException('Usuario o contraseña inválidos');
 
+    // Validar que el usuario esté activo
+    if (!user.activo)
+      throw new UnauthorizedException(
+        'Usuario deshabilitado. Contacte al administrador',
+      );
+
     const payload = this.buildTokenPayload(user);
     const token = this.jwtService.sign(payload);
 

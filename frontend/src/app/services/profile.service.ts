@@ -31,6 +31,13 @@ export class ProfileService {
   }
 
   /**
+   * Actualizar perfil del usuario logueado
+   */
+  updateProfile(data: FormData): Observable<{ message: string; usuario: ProfileData }> {
+    return this.api.put<{ message: string; usuario: ProfileData }>('/users/profile', data);
+  }
+
+  /**
    * Últimas publicaciones (3)
    * Para mostrar en la parte superior del perfil
    */

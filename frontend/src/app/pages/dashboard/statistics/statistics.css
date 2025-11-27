@@ -1,0 +1,41 @@
+/* ========================================
+   STATISTICS CONTAINER
+======================================== */
+.statistics-container {
+  @apply max-w-7xl mx-auto px-4 py-8;
+}
+
+/* ========================================
+   HEADER
+======================================== */
+.statistics-header {
+  @apply mb-8;
+}
+
+.statistics-title {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+.statistics-subtitle {
+  @apply text-gray-600 mt-2;
+}
+
+/* ========================================
+   CHARTS GRID
+======================================== */
+.charts-grid {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-6;
+}
+
+.chart-card {
+  @apply min-h-[400px];
+}
+
+.chart-container {
+  @apply relative h-[350px] w-full;
+}
+
+/* Hacer que el tercer gráfico ocupe 2 columnas en pantallas grandes */
+.chart-card:nth-child(3) {
+  @apply lg:col-span-2;
+}

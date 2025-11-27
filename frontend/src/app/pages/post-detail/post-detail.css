@@ -47,6 +47,7 @@
 ======================================== */
 .image-column {
   @apply bg-black flex items-center justify-center overflow-hidden;
+  position: relative;
 }
 
 .modal-image {
@@ -86,6 +87,8 @@
 ======================================== */
 .comments-container {
   @apply flex-1 overflow-y-auto p-4 space-y-4;
+  max-height: 450px;
+  min-height: 200px;
   scrollbar-width: thin;
   scrollbar-color: #cbd5e0 transparent;
 }

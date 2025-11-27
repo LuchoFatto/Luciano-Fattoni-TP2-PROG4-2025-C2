@@ -13,7 +13,6 @@ import { LoadingService } from '../../services/loading.service';
 
 // Components
 import { TextareaComponent, SpinnerComponent, AvatarComponent } from '../../shared/ui';
-
 @Component({
   selector: 'app-post-detail',
   standalone: true,
@@ -221,7 +220,13 @@ export class PostDetail implements OnInit {
   //  ELIMINAR COMENTARIO
   // ========================================
   async deleteComment(commentId: string) {
-    const confirmed = confirm('¿Estás seguro de eliminar este comentario?');
+    const confirmed = await this.alerts.confirmDanger(
+      '¿Estás seguro?',
+      'Esta acción no se puede deshacer',
+      'Sí, eliminar',
+      'Cancelar'
+    );
+
     if (!confirmed) return;
 
     try {

@@ -23,7 +23,7 @@
 
     <!-- Usuario a la derecha -->
     <div class="flex items-center gap-3">
-      <div class="relative hidden md:flex items-center gap-3">
+      <div class="relative hidden md:flex items-center gap-3" (appClickOutside)="closeDropdown()">
         <span class="font-medium text-sm max-w-[120px] truncate">
           {{ username || 'Invitado' }}
         </span>

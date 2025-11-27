@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output, signal, HostListener } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ClickOutsideDirective } from '../../directives';
 
 export interface NavLink {
   label: string;
@@ -29,13 +30,8 @@ export class NavbarComponent {
   mobileMenuOpen = signal(false);
   defaultAvatar = 'https://cdn-icons-png.flaticon.com/512/9131/9131529.png';
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
-    if (!target.closest('ui-navbar')) {
-      this.dropdownOpen.set(false);
-      this.mobileMenuOpen.set(false);
-    }
+  closeDropdown(): void {
+    this.dropdownOpen.set(false);
   }
 
   toggleDropdown(): void {
