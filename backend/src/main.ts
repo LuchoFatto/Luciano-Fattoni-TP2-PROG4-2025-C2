@@ -15,7 +15,11 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: 'http://localhost:4200', // frontend
+    origin: [
+      'http://localhost:4200', // Angular dev server
+      'http://localhost:8080', // HTTP-server (PWA)
+      /https:\/\/.*\.vercel\.app$/, // Cualquier dominio de Vercel
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

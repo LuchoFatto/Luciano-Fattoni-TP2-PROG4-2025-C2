@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 })
 export class SessionTimerService {
   // Tiempo en minutos
-  private readonly WARNING_TIME = 10; // Mostrar advertencia cuando quede 10 min
+  private readonly WARNING_TIME = 5; // Mostrar advertencia cuando quede 5 min
   private readonly SESSION_DURATION = 15; // Token expira a los 15 min
 
   // Estado del timer
