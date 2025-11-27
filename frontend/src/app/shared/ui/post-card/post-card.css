@@ -63,6 +63,11 @@
   @apply p-1 rounded-full hover:scale-110 transition-transform active:scale-95;
 }
 
+/* Botón comentarios */
+.comment-btn {
+  @apply p-1 rounded-full hover:scale-110 transition-transform active:scale-95;
+}
+
 /* Tamaño del ícono */
 .icon {
   @apply w-6 h-6;

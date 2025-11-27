@@ -11,19 +11,28 @@
   </div>
 
   <!-- ===== LISTA DE PUBLICACIONES ===== -->
-  @if (loading()) {
-  <div class="loading-text">Cargando publicaciones...</div>
-  } @else { @for (post of posts(); track post._id) {
+
+  <!-- Si NO hay posts y NO terminó → spinner inline -->
+  @if (posts().length === 0 && !noMorePosts()) {
+  <div class="flex justify-center py-10 text-gray-500">
+    <ui-spinner size="lg" label="Cargando publicaciones..." />
+  </div>
+  }
+
+  <!-- Renderizar posts -->
+  @for (post of posts(); track post._id) {
   <ui-post-card
     [post]="post"
+    (open)="openPost(post)"
+    (comment)="openPost(post)"
     (like)="likePost(post)"
     (unlike)="unlikePost(post)"
     (delete)="deletePost(post)"
   />
   }
 
-  <!-- No hay resultados -->
-  @if (posts().length === 0) {
+  <!-- No hay publicaciones - mensaje -->
+  @if (posts().length === 0 && noMorePosts()) {
   <p class="no-posts">Todavía no hay publicaciones.</p>
   }
 
@@ -31,8 +40,10 @@
   @if (!noMorePosts() && posts().length > 0) {
   <div class="load-more-container">
     <button class="btn-load-more" [disabled]="loadingMore()" (click)="loadPosts()">
-      @if (!loadingMore()) { Ver más } @else { Cargando... }
+      @if (!loadingMore()) { Ver más } @else {
+      <ui-spinner size="sm" [inline]="true" label="" />
+      }
     </button>
   </div>
-  } }
+  }
 </div>

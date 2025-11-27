@@ -24,4 +24,8 @@ export class UsersService {
       $or: [{ correo: identifier }, { nombreUsuario: identifier }],
     });
   }
+
+  async findById(id: string) {
+    return this.userModel.findById(id);
+  }
 }

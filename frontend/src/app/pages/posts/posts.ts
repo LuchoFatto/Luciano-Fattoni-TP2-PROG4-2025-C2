@@ -1,25 +1,27 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostsService, PostUI } from '../../services/posts.service';
-import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
-import { PostCardComponent } from '../../shared/ui';
+import { PostCardComponent, SpinnerComponent } from '../../shared/ui';
+import { LoadingService } from '../../services/loading.service';
+import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-posts',
   standalone: true,
-  imports: [CommonModule, PostCardComponent],
+  imports: [CommonModule, PostCardComponent, SpinnerComponent],
   templateUrl: './posts.html',
   styleUrl: './posts.css',
 })
 export class Posts {
   private postsService = inject(PostsService);
   private alerts = inject(AlertService);
-  private auth = inject(AuthService);
+  private loadingOverlay = inject(LoadingService);
+  private router = inject(Router);
 
   // ====== STATE ======
   posts = signal<PostUI[]>([]);
-  loading = signal(false);
   loadingMore = signal(false);
   orden = signal<'fecha' | 'likes'>('fecha');
 
@@ -33,25 +35,36 @@ export class Posts {
   }
 
   /** Cargar publicaciones (inicial o "load more") */
-  loadPosts(initial = false) {
+  async loadPosts(initial = false) {
     if (initial) {
       this.offset = 0;
       this.noMorePosts.set(false);
       this.posts.set([]);
-      this.loading.set(true);
-    } else {
-      this.loadingMore.set(true);
+
+      await this.loadingOverlay
+        .wrap(async () => {
+          const list = await firstValueFrom(
+            this.postsService.getPosts(this.orden(), this.offset, this.limit)
+          );
+
+          this.posts.set(list);
+          if (list.length < this.limit) this.noMorePosts.set(true);
+          this.offset += this.limit;
+        })
+        .catch(() => {
+          this.alerts.error('Error al cargar publicaciones');
+        });
+
+      return;
     }
+
+    // ===== LOAD MORE =====
+    this.loadingMore.set(true);
 
     this.postsService.getPosts(this.orden(), this.offset, this.limit).subscribe({
       next: (list) => {
-        if (initial) {
-          this.posts.set(list);
-        } else {
-          this.posts.update((prev) => [...prev, ...list]);
-        }
+        this.posts.update((prev) => [...prev, ...list]);
 
-        // Si vienen menos de limit → no hay más
         if (list.length < this.limit) this.noMorePosts.set(true);
 
         this.offset += this.limit;
@@ -60,7 +73,6 @@ export class Posts {
         this.alerts.error('Error al cargar publicaciones');
       },
       complete: () => {
-        this.loading.set(false);
         this.loadingMore.set(false);
       },
     });
@@ -103,15 +115,23 @@ export class Posts {
   }
 
   /** Eliminar publicación */
-  deletePost(post: PostUI) {
-    this.postsService.delete(post._id).subscribe({
-      next: () => {
-        this.posts.update((list) => list.filter((p) => p._id !== post._id));
-        this.alerts.success('Publicación eliminada');
-      },
-      error: () => {
-        this.alerts.error('No se pudo eliminar la publicación');
-      },
+  async deletePost(post: PostUI) {
+    try {
+      await this.loadingOverlay.wrap(async () => {
+        await firstValueFrom(this.postsService.delete(post._id));
+      });
+
+      this.posts.update((list) => list.filter((p) => p._id !== post._id));
+      this.alerts.success('Publicación eliminada');
+    } catch {
+      this.alerts.error('No se pudo eliminar la publicación');
+    }
+  }
+
+  /** Ir a la página de la publicación (vista grande + comentarios) */
+  openPost(post: PostUI) {
+    this.router.navigate(['/posts', post._id], {
+      state: { post },
     });
   }
 

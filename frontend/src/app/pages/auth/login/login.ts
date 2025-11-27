@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AlertService } from '../../../services/alert.service';
 import { AuthService } from '../../../services/auth.service';
+import { SessionTimerService } from '../../../services/session-timer.service';
 import {
   CardComponent,
   FormFieldComponent,
@@ -11,6 +12,7 @@ import {
 } from '../../../shared/ui';
 import { strongPasswordValidator } from '../../../shared/validators/custom-validators';
 import { firstValueFrom } from 'rxjs';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -31,8 +33,8 @@ export class Login {
   private alert = inject(AlertService);
   private auth = inject(AuthService);
   private router = inject(Router);
-
-  loading = false;
+  private loadingOverlay = inject(LoadingService);
+  private sessionTimer = inject(SessionTimerService);
 
   // Form
   form = this.fb.group({
@@ -54,19 +56,20 @@ export class Login {
     }
 
     const { identifier, password } = this.form.value;
-    this.loading = true;
 
     try {
-      const res = await firstValueFrom(this.auth.login(String(identifier), String(password)));
+      const res = await this.loadingOverlay.wrap(
+        () => firstValueFrom(this.auth.login(String(identifier), String(password))),
+        'Iniciando sesión...'
+      );
 
       this.auth.setSession(res.token, res.usuario);
+      this.sessionTimer.start(); // Iniciar countdown de sesión
       this.alert.success('¡Bienvenido a Click!');
       this.router.navigateByUrl('/posts');
     } catch (err: any) {
       const msg = err?.error?.message || 'Credenciales inválidas';
       this.alert.error(msg);
-    } finally {
-      this.loading = false;
     }
   }
 }

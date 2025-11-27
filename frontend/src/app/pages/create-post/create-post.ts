@@ -15,6 +15,7 @@ import {
 import { PostsService } from '../../services/posts.service';
 import { AlertService } from '../../services/alert.service';
 import { firstValueFrom } from 'rxjs';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-create-post',
@@ -37,8 +38,8 @@ export class CreatePost {
   private postsService = inject(PostsService);
   private alert = inject(AlertService);
   private router = inject(Router);
+  private loadingOverlay = inject(LoadingService);
 
-  loading = false;
   imageFile: File | null = null;
 
   // ====== Formulario ======
@@ -64,8 +65,6 @@ export class CreatePost {
       return;
     }
 
-    this.loading = true;
-
     try {
       const formData = new FormData();
       const { titulo, descripcion } = this.form.value;
@@ -73,20 +72,20 @@ export class CreatePost {
       formData.append('titulo', titulo as string);
       formData.append('descripcion', descripcion as string);
 
-      // El backend espera el archivo bajo el nombre "imagen"
       if (this.imageFile) {
         formData.append('imagen', this.imageFile);
       }
 
-      await firstValueFrom(this.postsService.createPost(formData));
+      await this.loadingOverlay.wrap(
+        () => firstValueFrom(this.postsService.createPost(formData)),
+        'Creando publicación...'
+      );
 
       this.alert.success('Publicación creada correctamente');
       this.router.navigate(['/posts']);
     } catch (err: any) {
       console.error(err);
       this.alert.error(err?.error?.message || 'No se pudo crear la publicación');
-    } finally {
-      this.loading = false;
     }
   }
 }

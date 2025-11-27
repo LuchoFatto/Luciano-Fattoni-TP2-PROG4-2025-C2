@@ -1,10 +1,7 @@
 <div class="container-click animate-fade-in">
-  @if (loadingProfile()) {
-  <p class="loading">Cargando perfil...</p>
+  <!-- ======================= PROFILE CARD ======================= -->
+  @if (profile()) {
 
-  } @else if (profile()) {
-
-  <!-- CARD PRINCIPAL -->
   <div class="profile-card">
     <ui-profile
       [profile]="profile()!"
@@ -14,21 +11,22 @@
     />
   </div>
 
-  <!-- LINEA -->
   <div class="divider"></div>
 
-  <!-- =======================
-        TODAS TUS PUBLICACIONES
-      ======================= -->
+  <!-- ======================= PUBLICACIONES ======================= -->
   <h3 class="section-title">Todas tus publicaciones</h3>
 
   @if (loadingPosts()) {
-  <p class="loading">Cargando publicaciones...</p>
+  <div class="flex justify-center py-10 text-gray-500">
+    <ui-spinner size="lg" label="Cargando publicaciones..." />
+  </div>
 
   } @else if (allPosts().length === 0) {
+
   <p class="no-posts">Todavía no tenés publicaciones.</p>
 
   } @else {
+
   <div class="posts-grid">
     @for (post of allPosts(); track post._id) {
     <div class="grid-item" (click)="openPost(post)">
@@ -37,15 +35,4 @@
     }
   </div>
   } }
-
-  <!-- MODAL -->
-  @if (selectedPost()) {
-  <ui-post-modal
-    [post]="selectedPost()!"
-    (closed)="closeModal()"
-    (like)="onLike($event)"
-    (unlike)="onUnlike($event)"
-    (delete)="onDelete($event)"
-  />
-  }
 </div>

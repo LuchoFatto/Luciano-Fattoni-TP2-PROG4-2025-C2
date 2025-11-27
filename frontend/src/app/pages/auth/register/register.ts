@@ -19,6 +19,7 @@ import {
   minimumAgeValidator,
 } from '../../../shared/validators/custom-validators';
 import { firstValueFrom } from 'rxjs';
+import { LoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-register',
@@ -32,8 +33,8 @@ import { firstValueFrom } from 'rxjs';
     InputComponent,
     TextareaComponent,
     CardComponent,
-    RouterLink
-],
+    RouterLink,
+  ],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
 })
@@ -42,8 +43,8 @@ export class Register {
   private auth = inject(AuthService);
   private alert = inject(AlertService);
   private router = inject(Router);
+  private loadingOverlay = inject(LoadingService);
 
-  loading = false;
   imageFile: File | null = null;
 
   // =================== Formulario reactivo ===================
@@ -88,8 +89,6 @@ export class Register {
       return;
     }
 
-    this.loading = true;
-
     try {
       const formData = new FormData();
 
@@ -103,14 +102,15 @@ export class Register {
         formData.append('imagenPerfil', this.imageFile);
       }
 
-      await firstValueFrom(this.auth.register(formData));
+      await this.loadingOverlay.wrap(
+        () => firstValueFrom(this.auth.register(formData)),
+        'Registrando usuario...'
+      );
 
       this.alert.success('Registro exitoso');
       this.router.navigate(['/login']);
     } catch (err: any) {
       this.alert.error(err?.error?.message || 'Error al registrarse');
-    } finally {
-      this.loading = false;
     }
   }
 }

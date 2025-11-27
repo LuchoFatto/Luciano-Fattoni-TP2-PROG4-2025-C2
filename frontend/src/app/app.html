@@ -9,4 +9,14 @@
   (logoClicked)="goHome()"
 ></ui-navbar>
 
-<router-outlet></router-outlet>
+<ui-loading-overlay />
+<router-outlet />
+
+<!-- Modal de advertencia de sesión -->
+@if (showSessionWarning()) {
+<ui-session-warning-modal
+  [timeRemaining]="formattedTime()"
+  (extend)="onExtendSession()"
+  (logout)="onLogoutFromModal()"
+/>
+}

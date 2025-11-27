@@ -32,7 +32,7 @@ export class PostsService {
   private api = inject(ApiService);
   private auth = inject(AuthService);
 
-  /** Convertir Post → PostUI */
+  /** Convertir Post - PostUI */
   private toUI(post: Post): PostUI {
     const currentUser = this.auth.currentUser();
 
@@ -49,6 +49,11 @@ export class PostsService {
     return this.api
       .get<Post[]>(`/posts?orden=${orden}&offset=${offset}&limit=${limit}`)
       .pipe(map((posts) => posts.map((p) => this.toUI(p))));
+  }
+
+  /** Obtener un post por ID */
+  getById(postId: string) {
+    return this.api.get<Post>(`/posts/${postId}`).pipe(map((post) => this.toUI(post)));
   }
 
   /** Listar publicaciones de un usuario específico */

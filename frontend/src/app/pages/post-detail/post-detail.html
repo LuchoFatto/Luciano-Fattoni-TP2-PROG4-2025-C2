@@ -1,0 +1,196 @@
+<!-- Overlay fullscreen estilo Instagram -->
+<div class="modal-overlay" (click)="goBack()">
+  <!-- Loading inicial del post -->
+  @if (loadingPost()) {
+  <div class="loading-container" (click)="$event.stopPropagation()">
+    <ui-spinner />
+    <p class="loading-text">Cargando publicación...</p>
+  </div>
+  }
+
+  <!-- Modal Container (detiene propagación para no cerrar al hacer click adentro) -->
+  @if (!loadingPost() && post()) {
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Botón cerrar (X) -->
+    <button class="close-button" (click)="goBack()" aria-label="Cerrar">
+      <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+        <path
+          d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59 7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12 5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.88a.996.996 0 1 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+        />
+      </svg>
+    </button>
+
+    <!-- Grid: Imagen Left | Sidebar Right -->
+    <div class="modal-grid">
+      <!-- ========================================
+          COLUMNA IZQUIERDA: IMAGEN
+      ========================================= -->
+      <div class="image-column">
+        @if (post()!.imagenUrl) {
+        <img [src]="post()!.imagenUrl" [alt]="post()!.titulo" class="modal-image" />
+        } @else {
+        <div class="no-image-placeholder">
+          <p>Esta publicación no tiene imagen</p>
+        </div>
+        }
+      </div>
+
+      <!-- ========================================
+          COLUMNA DERECHA: SIDEBAR
+      ========================================= -->
+      <div class="sidebar-column">
+        <!-- Header: Avatar + Nombre -->
+        <div class="sidebar-header">
+          <ui-avatar
+            [src]="post()!.autor.imagenPerfil"
+            [alt]="post()!.autor.nombreUsuario"
+            size="md"
+          />
+          <div class="header-info">
+            <h3 class="author-name">{{ post()!.autor.nombreUsuario }}</h3>
+          </div>
+        </div>
+
+        <!-- Comentarios Container (con scroll) -->
+        <div class="comments-container">
+          <!-- Primer comentario: Descripción del post (autor) -->
+          <div class="comment-item description-comment">
+            <ui-avatar
+              [src]="post()!.autor.imagenPerfil"
+              [alt]="post()!.autor.nombreUsuario"
+              size="sm"
+            />
+            <div class="comment-content">
+              <div class="comment-header-inline">
+                <span class="comment-author">{{ post()!.autor.nombreUsuario }}</span>
+                <span class="comment-time">{{ post()!.createdAt | date : 'dd/MM/yyyy' }}</span>
+              </div>
+              <p class="comment-text">
+                <strong>{{ post()!.titulo }}</strong>
+                @if (post()!.descripcion) {
+                <br />
+                {{ post()!.descripcion }}
+                }
+              </p>
+            </div>
+          </div>
+
+          <!-- Loading comentarios -->
+          @if (loadingComments()) {
+          <div class="comments-loading">
+            <ui-spinner />
+            <p class="loading-text">Cargando comentarios...</p>
+          </div>
+          }
+
+          <!-- Lista de comentarios -->
+          @if (!loadingComments()) { @if (comments().length === 0) {
+          <p class="no-comments">Sin comentarios aún. ¡Sé el primero en comentar!</p>
+          } @else { @for (comment of comments(); track comment._id) {
+          <div class="comment-item">
+            <!-- Avatar -->
+            <ui-avatar
+              [src]="comment.autor.imagenPerfil"
+              [alt]="comment.autor.nombreUsuario"
+              size="sm"
+            />
+
+            <!-- Contenido del comentario -->
+            <div class="comment-content">
+              @if (editingCommentId() === comment._id) {
+              <!-- Modo edición -->
+              <form [formGroup]="editForm" class="edit-form" (ngSubmit)="saveEdit(comment._id)">
+                <ui-textarea
+                  [control]="editForm.controls.mensaje"
+                  [rows]="2"
+                  [maxLength]="500"
+                  placeholder="Edita tu comentario..."
+                />
+                <div class="edit-actions">
+                  <button type="submit" class="save-btn">Guardar</button>
+                  <button type="button" (click)="cancelEditing()" class="cancel-btn">
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+              } @else {
+              <!-- Modo lectura -->
+              <div class="comment-header-inline">
+                <span class="comment-author">{{ comment.autor.nombreUsuario }}</span>
+                <span class="comment-time">{{ comment.createdAt | date : 'dd/MM/yyyy' }}</span>
+                @if (comment.modificado) {
+                <span class="edited-badge">• Editado</span>
+                }
+              </div>
+              <p class="comment-text">{{ comment.mensaje }}</p>
+
+              <!-- Acciones (solo si es el autor) -->
+              @if (isCommentAuthor(comment)) {
+              <div class="comment-actions">
+                <button (click)="startEditing(comment)" class="action-link">Editar</button>
+                <button (click)="deleteComment(comment._id)" class="action-link delete">
+                  Eliminar
+                </button>
+              </div>
+              } }
+            </div>
+          </div>
+          } }
+
+          <!-- Botón "Cargar más" -->
+          @if (!noMoreComments() && comments().length > 0) {
+          <button (click)="loadMoreComments()" class="load-more-btn" [disabled]="loadingMore()">
+            @if (loadingMore()) { Cargando... } @else { Ver más comentarios }
+          </button>
+          } }
+        </div>
+
+        <!-- Footer: Likes + Input comentario -->
+        <div class="sidebar-footer">
+          <!-- Acciones: Like -->
+          <div class="post-actions">
+            <button
+              (click)="toggleLike()"
+              class="action-icon like-btn"
+              [class.liked]="post()!.likedByMe"
+            >
+              @if (post()!.likedByMe) {
+              <svg width="24" height="24" fill="#ed4956" viewBox="0 0 24 24">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                />
+              </svg>
+              } @else {
+              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"
+                />
+              </svg>
+              }
+            </button>
+          </div>
+
+          <!-- Contador de likes -->
+          <div class="likes-count">
+            <strong>{{ post()!.likesCount }}</strong> Me gusta
+          </div>
+
+          <!-- Formulario comentario -->
+          <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()" class="comment-form">
+            <input
+              type="text"
+              [formControl]="commentForm.controls.mensaje"
+              placeholder="Agrega un comentario..."
+              class="comment-input"
+              maxlength="500"
+            />
+            <button type="submit" class="post-btn" [disabled]="commentForm.invalid">
+              Publicar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

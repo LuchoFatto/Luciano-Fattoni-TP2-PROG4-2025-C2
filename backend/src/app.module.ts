@@ -9,6 +9,7 @@ import { PostsModule } from './modules/posts/posts.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SupabaseModule } from './supabase/supabase.module';
+import { CommentsModule } from './modules/comments/comments.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SupabaseModule } from './supabase/supabase.module';
     SupabaseModule,
     AuthModule,
     PostsModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

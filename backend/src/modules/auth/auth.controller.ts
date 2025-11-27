@@ -4,11 +4,15 @@ import {
   Body,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
+import { TokenDto } from './dto/token.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -36,5 +40,17 @@ export class AuthController {
   @Post('login')
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  @Post('authorize')
+  @UseGuards(JwtAuthGuard)
+  authorize(@Req() req: any) {
+    return this.authService.authorizeFromUser(req.user);
+  }
+
+  @Post('refresh')
+  @UseGuards(JwtAuthGuard)
+  refresh(@Req() req: any) {
+    return this.authService.refreshFromUser(req.user);
   }
 }

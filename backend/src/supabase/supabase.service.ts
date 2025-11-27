@@ -16,7 +16,8 @@ export class SupabaseService {
     file: Express.Multer.File,
     userId: string,
   ): Promise<string> {
-    const fileName = `profiles/${userId}-${Date.now()}-${file.originalname}`;
+    const sanitized = this.sanitizeFileName(file.originalname);
+    const fileName = `profiles/${userId}-${Date.now()}-${sanitized}`;
     const { data, error } = await this.supabase.storage
       .from('avatars')
       .upload(fileName, file.buffer, {
@@ -38,7 +39,8 @@ export class SupabaseService {
     file: Express.Multer.File,
     postId: string,
   ): Promise<string> {
-    const fileName = `posts/${postId}-${Date.now()}-${file.originalname}`;
+    const sanitized = this.sanitizeFileName(file.originalname);
+    const fileName = `posts/${postId}-${Date.now()}-${sanitized}`;
 
     const { data, error } = await this.supabase.storage
       .from('posts')
@@ -48,13 +50,23 @@ export class SupabaseService {
         upsert: false,
       });
 
-    if (error)
+    if (error) {
       throw new InternalServerErrorException('Error al subir imagen del post');
+    }
 
     const { data: publicUrlData } = this.supabase.storage
       .from('posts')
       .getPublicUrl(data.path);
 
     return publicUrlData.publicUrl;
+  }
+
+  private sanitizeFileName(name: string): string {
+    return name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9.\-_ ]/g, '')
+      .replace(/\s+/g, '-')
+      .toLowerCase();
   }
 }

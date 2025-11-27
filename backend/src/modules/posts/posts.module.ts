@@ -14,6 +14,9 @@ import { UsersModule } from '../users/users.module';
   ],
   controllers: [PostsController],
   providers: [PostsService],
-  exports: [PostsService],
+  exports: [
+    PostsService,
+    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+  ],
 })
 export class PostsModule {}

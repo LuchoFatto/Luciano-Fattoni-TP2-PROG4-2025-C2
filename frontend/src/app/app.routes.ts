@@ -29,6 +29,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/profile/profile').then((m) => m.Profile),
   },
   {
+    path: 'posts/:id',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/post-detail/post-detail').then((m) => m.PostDetail),
+  },
+  {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full',

@@ -18,6 +18,15 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  private buildTokenPayload(user: any) {
+    return {
+      sub: user._id,
+      correo: user.correo,
+      nombreUsuario: user.nombreUsuario,
+      perfil: user.perfil,
+    };
+  }
+
   async register(createUserDto: CreateUserDto, file?: Express.Multer.File) {
     const { correo, nombreUsuario, password } = createUserDto;
 
@@ -49,8 +58,12 @@ export class AuthService {
 
     const { password: _, ...usuarioSinPassword } = newUser.toObject();
 
+    const payload = this.buildTokenPayload(newUser);
+    const token = this.jwtService.sign(payload);
+
     return {
       message: 'Usuario registrado correctamente',
+      token,
       usuario: usuarioSinPassword,
     };
   }
@@ -65,13 +78,43 @@ export class AuthService {
     if (!valid)
       throw new UnauthorizedException('Usuario o contraseña inválidos');
 
-    const token = this.jwtService.sign({
-      sub: user._id,
-      nombreUsuario: user.nombreUsuario,
-    });
+    const payload = this.buildTokenPayload(user);
+    const token = this.jwtService.sign(payload);
 
     const { password: _, ...usuarioSinPassword } = user.toObject();
 
     return { message: 'Login exitoso', token, usuario: usuarioSinPassword };
+  }
+
+  // =============================
+  //   VALIDAR TOKEN (desde req.user ya validado)
+  // =============================
+  async authorizeFromUser(userPayload: any) {
+    const user = await this.usersService.findById(userPayload.userId);
+    if (!user) throw new UnauthorizedException('Usuario no encontrado');
+
+    const { password, ...usuarioSinPassword } = user.toObject();
+
+    return {
+      message: 'Token válido',
+      usuario: usuarioSinPassword,
+    };
+  }
+
+  // =============================
+  //   REFRESCAR TOKEN (desde req.user ya validado)
+  // =============================
+  async refreshFromUser(userPayload: any) {
+    const newToken = this.jwtService.sign({
+      sub: userPayload.userId,
+      correo: userPayload.correo,
+      nombreUsuario: userPayload.nombreUsuario,
+      perfil: userPayload.perfil,
+    });
+
+    return {
+      message: 'Token refrescado',
+      token: newToken,
+    };
   }
 }

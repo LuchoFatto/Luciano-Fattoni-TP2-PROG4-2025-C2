@@ -1,0 +1,308 @@
+/* ========================================
+   MODAL OVERLAY (Fullscreen con blur)
+======================================== */
+.modal-overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+/* ========================================
+   MODAL CONTAINER
+======================================== */
+.modal-container {
+  @apply relative bg-white rounded-lg shadow-2xl;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 1200px;
+  height: 85vh;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ========================================
+   BOTÓN CERRAR (X)
+======================================== */
+.close-button {
+  @apply absolute top-4 right-4 z-10;
+  @apply w-10 h-10 rounded-full bg-white shadow-lg;
+  @apply flex items-center justify-center;
+  @apply text-gray-700 hover:text-gray-900 hover:bg-gray-100;
+  @apply transition-all cursor-pointer;
+}
+
+.close-button:hover {
+  @apply scale-110;
+}
+
+/* ========================================
+   GRID: 2 COLUMNAS
+======================================== */
+.modal-grid {
+  @apply grid grid-cols-1 md:grid-cols-[1.2fr_500px] w-full h-full;
+}
+
+/* ========================================
+   COLUMNA IZQUIERDA: IMAGEN
+======================================== */
+.image-column {
+  @apply bg-black flex items-center justify-center overflow-hidden;
+}
+
+.modal-image {
+  @apply max-w-full max-h-full object-contain;
+}
+
+.no-image-placeholder {
+  @apply flex items-center justify-center text-gray-400 text-lg;
+}
+
+/* ========================================
+   COLUMNA DERECHA: SIDEBAR
+======================================== */
+.sidebar-column {
+  @apply flex flex-col bg-white;
+  @apply border-l border-gray-200;
+}
+
+/* ========================================
+   SIDEBAR HEADER
+======================================== */
+.sidebar-header {
+  @apply flex items-center gap-3 p-4 border-b border-gray-200;
+  @apply shrink-0;
+}
+
+.header-info {
+  @apply flex flex-col;
+}
+
+.author-name {
+  @apply font-semibold text-gray-900 text-sm;
+}
+
+/* ========================================
+   COMENTARIOS CONTAINER (Scrolleable)
+======================================== */
+.comments-container {
+  @apply flex-1 overflow-y-auto p-4 space-y-4;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 transparent;
+}
+
+.comments-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.comments-container::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 3px;
+}
+
+/* ========================================
+   COMMENT ITEM
+======================================== */
+.comment-item {
+  @apply flex gap-3 items-start;
+}
+
+.description-comment {
+  @apply pb-4 border-b border-gray-200;
+}
+
+.comment-content {
+  @apply flex-1 min-w-0;
+}
+
+.comment-header-inline {
+  @apply flex items-center gap-2 flex-wrap mb-1;
+}
+
+.comment-author {
+  @apply font-semibold text-sm text-gray-900;
+}
+
+.comment-time {
+  @apply text-xs text-gray-500;
+}
+
+.edited-badge {
+  @apply text-xs text-orange-500 font-medium;
+}
+
+.comment-text {
+  @apply text-sm text-gray-800 whitespace-pre-wrap break-words;
+}
+
+/* ========================================
+   COMMENT ACTIONS
+======================================== */
+.comment-actions {
+  @apply flex gap-4 mt-2;
+}
+
+.action-link {
+  @apply text-xs font-medium text-gray-500 hover:text-gray-700;
+  @apply cursor-pointer transition-colors;
+  background: none;
+  border: none;
+}
+
+.action-link.delete {
+  @apply text-red-500 hover:text-red-700;
+}
+
+/* ========================================
+   EDIT FORM
+======================================== */
+.edit-form {
+  @apply space-y-2;
+}
+
+.edit-actions {
+  @apply flex gap-2;
+}
+
+.save-btn,
+.cancel-btn {
+  @apply px-3 py-1 text-xs font-medium rounded transition-colors;
+  border: none;
+  cursor: pointer;
+}
+
+.save-btn {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.cancel-btn {
+  @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+}
+
+/* ========================================
+   LOADING & NO COMMENTS
+======================================== */
+.comments-loading {
+  @apply flex flex-col items-center gap-2 py-8;
+}
+
+.loading-container {
+  @apply flex flex-col items-center justify-center gap-4 py-12;
+}
+
+.loading-text {
+  @apply text-sm text-gray-600;
+}
+
+.no-comments {
+  @apply text-center text-gray-500 text-sm py-8 italic;
+}
+
+/* ========================================
+   LOAD MORE BUTTON
+======================================== */
+.load-more-btn {
+  @apply w-full text-center text-sm font-medium text-gray-500;
+  @apply hover:text-gray-700 py-2 cursor-pointer;
+  @apply transition-colors;
+  background: none;
+  border: none;
+}
+
+.load-more-btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* ========================================
+   SIDEBAR FOOTER
+======================================== */
+.sidebar-footer {
+  @apply border-t border-gray-200 p-4 space-y-3 shrink-0;
+}
+
+/* ========================================
+   POST ACTIONS (Like button)
+======================================== */
+.post-actions {
+  @apply flex items-center gap-4;
+}
+
+.action-icon {
+  @apply cursor-pointer transition-transform hover:scale-110;
+  background: none;
+  border: none;
+  padding: 0;
+  color: #262626;
+}
+
+.action-icon.liked {
+  animation: likeAnimation 0.3s ease;
+}
+
+@keyframes likeAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ========================================
+   LIKES COUNT
+======================================== */
+.likes-count {
+  @apply text-sm text-gray-900;
+}
+
+/* ========================================
+   COMMENT FORM (Input)
+======================================== */
+.comment-form {
+  @apply flex items-center gap-2;
+}
+
+.comment-input {
+  @apply flex-1 border-none outline-none text-sm;
+  @apply placeholder-gray-400;
+}
+
+.comment-input:focus {
+  outline: none;
+}
+
+.post-btn {
+  @apply text-sm font-semibold text-blue-600;
+  @apply hover:text-blue-800 transition-colors;
+  @apply disabled:opacity-30 disabled:cursor-not-allowed;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ========================================
+   RESPONSIVE (Mobile)
+======================================== */
+@media (max-width: 768px) {
+  .modal-container {
+    @apply max-w-full max-h-full w-full h-full rounded-none;
+  }
+
+  .modal-grid {
+    @apply grid-cols-1;
+  }
+
+  .image-column {
+    @apply max-h-[50vh];
+  }
+
+  .close-button {
+    @apply top-2 right-2;
+  }
+}

@@ -16,6 +16,8 @@ export class PostCardComponent {
   @Output() like = new EventEmitter<string>();
   @Output() unlike = new EventEmitter<string>();
   @Output() delete = new EventEmitter<string>();
+  @Output() open = new EventEmitter<void>();
+  @Output() comment = new EventEmitter<void>();
 
   private alerts = inject(AlertService);
 
@@ -35,8 +37,25 @@ export class PostCardComponent {
     return `hace ${Math.floor(day)} días`;
   }
 
+  /** Abrir publicación (card clickeada) */
+  onOpen() {
+    this.open.emit();
+  }
+
+  /** Click en like: que no navegue */
+  onLikeClick(event: MouseEvent) {
+    event.stopPropagation();
+    this.toggleLike();
+  }
+
+  /** Click en comentarios: que no navegue */
+  onCommentClick(event: MouseEvent) {
+    event.stopPropagation();
+    this.comment.emit();
+  }
+
   /** Like / unlike */
-  toggleLike() {
+  private toggleLike() {
     if (this.post.likedByMe) {
       this.unlike.emit(this.post._id);
     } else {
@@ -44,8 +63,14 @@ export class PostCardComponent {
     }
   }
 
+  /** Click en eliminar: que no navegue */
+  async onDeleteClick(event: MouseEvent) {
+    event.stopPropagation();
+    await this.confirmDelete();
+  }
+
   /** Confirmación elegante para borrar */
-  async confirmDelete() {
+  private async confirmDelete() {
     const res = await this.alerts.confirmDanger(
       'Eliminar publicación',
       '¿Seguro que querés eliminar esta publicación?',

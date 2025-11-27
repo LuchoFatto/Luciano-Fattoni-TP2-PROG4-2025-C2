@@ -40,6 +40,13 @@ export class PostsController {
     return this.postsService.findAll(filtros);
   }
 
+  // Obtener una publicación por ID
+  @Get(':id')
+  findOne(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user.userId;
+    return this.postsService.findOne(id, userId);
+  }
+
   // Baja lógica
   @Delete(':id')
   async remove(@Param('id') id: string, @Req() req: any) {

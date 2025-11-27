@@ -50,6 +50,22 @@ export class AuthService {
     return this.api.post('/auth/register', data);
   }
 
+  /**
+   * Valida el token guardado usando /auth/authorize
+   * El token va automáticamente en Authorization gracias al interceptor
+   */
+  authorize(): Observable<any> {
+    return this.api.post('/auth/authorize', {});
+  }
+
+  /**
+   * Refresca el token (genera uno nuevo con 15 minutos de validez)
+   * El token actual va automáticamente en Authorization gracias al interceptor
+   */
+  refresh(): Observable<{ token: string; message: string }> {
+    return this.api.post<{ token: string; message: string }>('/auth/refresh', {});
+  }
+
   // ==========================================================
   // SESIÓN LOCAL
   // ==========================================================
@@ -64,6 +80,17 @@ export class AuthService {
       this._currentUser.set(usuario);
     } catch (err) {
       console.error('Error guardando sesión:', err);
+    }
+  }
+
+  /**
+   * Actualiza solo el token (usado en refresh)
+   */
+  updateToken(token: string): void {
+    try {
+      localStorage.setItem(this.TOKEN_KEY, token);
+    } catch (err) {
+      console.error('Error actualizando token:', err);
     }
   }
 

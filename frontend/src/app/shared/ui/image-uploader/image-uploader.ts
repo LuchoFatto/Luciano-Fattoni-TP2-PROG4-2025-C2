@@ -37,6 +37,7 @@ import { CommonModule } from '@angular/common';
         <input
           #fileInput
           type="file"
+          [name]="fieldName"
           accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
           (change)="onFile($event)"
           class="hidden"
@@ -85,6 +86,7 @@ export class ImageUploaderComponent implements OnChanges {
   @Input() resetKey = 0;
   @Input() maxSizeMB = 5;
   @Input() ariaLabel = 'Subir imagen';
+  @Input() fieldName = 'imagen';
 
   preview: string | null = null;
   error: string | null = null;

@@ -65,6 +65,24 @@ export class PostsService {
     return publicaciones;
   }
 
+  // Obtener una publicación por ID
+  async findOne(postId: string, userId: string) {
+    if (!Types.ObjectId.isValid(postId)) {
+      throw new BadRequestException('ID de publicación inválido');
+    }
+
+    const post = await this.postModel
+      .findById(postId)
+      .populate('autor', 'nombreUsuario imagenPerfil')
+      .exec();
+
+    if (!post || !post.activo) {
+      throw new NotFoundException('Publicación no encontrada');
+    }
+
+    return post;
+  }
+
   // Baja logica
   async softDelete(postId: string, userId: string) {
     const post = await this.postModel.findById(postId);
