@@ -98,49 +98,72 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, AdminGuard)
   @UseInterceptors(FileInterceptor('imagenPerfil'))
   async create(@UploadedFile() file: Express.Multer.File, @Body() body: any) {
-    // Validar que el perfil sea válido
-    const perfil = body.perfil || 'usuario';
-    if (!['usuario', 'administrador'].includes(perfil)) {
-      throw new NotFoundException('Perfil inválido');
-    }
+    try {
+      // Validaciones básicas
+      if (!body.password || body.password.length < 8) {
+        throw new NotFoundException(
+          'La contraseña debe tener al menos 8 caracteres',
+        );
+      }
 
-    const createUserDto: CreateUserDto = {
-      nombre: body.nombre,
-      apellido: body.apellido,
-      correo: body.correo,
-      nombreUsuario: body.nombreUsuario,
-      password: body.password,
-      perfil: perfil,
-      fechaNacimiento: body.fechaNacimiento,
-      descripcion: body.descripcion,
-      imagenPerfil: '',
-    };
+      // Validar que el perfil sea válido
+      const perfil = body.perfil || 'usuario';
+      if (!['usuario', 'administrador'].includes(perfil)) {
+        throw new NotFoundException('Perfil inválido');
+      }
 
-    // Hash de password
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-
-    // Crear usuario
-    const newUser = await this.usersService.create({
-      ...createUserDto,
-      password: hashedPassword,
-    });
-
-    // Subir imagen si existe
-    if (file) {
-      const imageUrl = await this.supabaseService.uploadProfileImage(
-        file,
-        newUser._id as string,
+      // Verificar si el usuario ya existe
+      const existingUser = await this.usersService.findByEmailOrUsername(
+        body.correo,
+        body.nombreUsuario,
       );
-      newUser.imagenPerfil = imageUrl;
-      await newUser.save();
+      if (existingUser) {
+        throw new NotFoundException(
+          'El correo o nombre de usuario ya están en uso',
+        );
+      }
+
+      const createUserDto: CreateUserDto = {
+        nombre: body.nombre,
+        apellido: body.apellido,
+        correo: body.correo,
+        nombreUsuario: body.nombreUsuario,
+        password: body.password,
+        perfil: perfil,
+        fechaNacimiento: body.fechaNacimiento,
+        descripcion: body.descripcion,
+        imagenPerfil: '',
+      };
+
+      // Hash de password
+      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+
+      // Crear usuario
+      const newUser = await this.usersService.create({
+        ...createUserDto,
+        password: hashedPassword,
+      });
+
+      // Subir imagen si existe
+      if (file) {
+        const imageUrl = await this.supabaseService.uploadProfileImage(
+          file,
+          newUser._id as string,
+        );
+        newUser.imagenPerfil = imageUrl;
+        await newUser.save();
+      }
+
+      const { password: _, ...usuarioSinPassword } = newUser.toObject();
+
+      return {
+        message: 'Usuario creado correctamente',
+        usuario: usuarioSinPassword,
+      };
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error;
     }
-
-    const { password: _, ...usuarioSinPassword } = newUser.toObject();
-
-    return {
-      message: 'Usuario creado correctamente',
-      usuario: usuarioSinPassword,
-    };
   }
 
   /**
