@@ -44,6 +44,7 @@ export class AppComponent {
   });
 
   constructor() {
+    // Actualizar navbar según usuario
     effect(() => {
       const user = this.auth.currentUser();
 
@@ -57,10 +58,8 @@ export class AppComponent {
           { label: 'Mi Perfil' },
         ]);
 
-        // Dropdown para usuarios normales y administradores
         const dropdownItems: ({ label: string; divider?: false } | { divider: true })[] = [];
 
-        // Si es admin, agregar opción de Dashboard
         if (user.perfil === 'administrador') {
           dropdownItems.push({ label: 'Dashboard' });
           dropdownItems.push({ label: 'Estadísticas' });
@@ -86,6 +85,17 @@ export class AppComponent {
     // Observar cambios en el tiempo restante
     effect(() => {
       this.timeRemaining.set(this.sessionTimer.timeRemaining());
+    });
+
+    // Cerrar sesión automáticamente cuando llegue a 0
+    effect(() => {
+      const remaining = this.timeRemaining();
+
+      if (remaining === 0 && this.showSessionWarning()) {
+        // Tiempo agotado - cerrar sesión automáticamente
+        this.alert.warning('Tu sesión ha expirado');
+        this.onLogoutFromModal();
+      }
     });
   }
 
