@@ -30,7 +30,7 @@ export class PostsController {
     @Body() dto: CreatePostDto,
     @Req() req: any,
   ) {
-    const userId = req.user.userId;
+    const userId = req.user._id;
     return this.postsService.create(dto, userId, file);
   }
 
@@ -43,28 +43,28 @@ export class PostsController {
   // Obtener una publicación por ID
   @Get(':id')
   findOne(@Param('id') id: string, @Req() req: any) {
-    const userId = req.user.userId;
+    const userId = req.user._id;
     return this.postsService.findOne(id, userId);
   }
 
   // Baja lógica (dueño o admin)
   @Delete(':id')
   async remove(@Param('id') id: string, @Req() req: any) {
-    const { userId, perfil } = req.user;
+    const { _id: userId, perfil } = req.user;
     return this.postsService.softDelete(id, userId, perfil);
   }
 
   //Agregar me gusta
   @Post(':id/like')
   addLike(@Param('id') id: string, @Req() req: any) {
-    const userId = req.user.userId;
+    const userId = req.user._id;
     return this.postsService.addLike(id, userId);
   }
 
   //Sacar me gusta
   @Delete(':id/like')
   removeLike(@Param('id') id: string, @Req() req: any) {
-    const userId = req.user.userId;
+    const userId = req.user._id;
     return this.postsService.removeLike(id, userId);
   }
 }

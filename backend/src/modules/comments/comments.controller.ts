@@ -47,7 +47,7 @@ export class CommentsController {
     @Req() req: any,
     @Body() dto: CreateCommentDto,
   ) {
-    const userId = req.user.userId;
+    const userId = req.user._id;
     return this.commentsService.createComment(postId, userId, dto);
   }
 
@@ -60,7 +60,7 @@ export class CommentsController {
     @Req() req: any,
     @Body() dto: UpdateCommentDto,
   ) {
-    const userId = req.user.userId;
+    const userId = req.user._id;
     return this.commentsService.updateComment(commentId, userId, dto);
   }
 
@@ -69,7 +69,7 @@ export class CommentsController {
   // ============================
   @Delete(':commentId')
   async deleteComment(@Param('commentId') commentId: string, @Req() req: any) {
-    const userId = req.user.userId;
+    const userId = req.user._id;
     return this.commentsService.deleteComment(commentId, userId);
   }
 }
